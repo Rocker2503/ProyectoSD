@@ -19,12 +19,12 @@ import java.util.logging.Logger;
  *
  * @author gsanh
  */
-public class Distribuidor1 {
+public class Distribuidor {
 
     public static void main(String[] args) throws UnknownHostException, IOException {
         int port = 49775;
-        String ip = "127.0.0.1";
-        String ip2 = "127.0.0.2";
+        String ip = "25.49.16.34";
+        String ip2 = "25.48.255.90";
         int listenPort = 69;
         InetAddress addr = InetAddress.getByName(ip2);
 
@@ -33,8 +33,8 @@ public class Distribuidor1 {
             
             Socket ss = new Socket(ip, port);
             ServerSocket listener = new ServerSocket(listenPort, 0, addr);
-            DataInputStream inSocket = new DataInputStream(ss.getInputStream());
-            DataOutputStream outSocket = new DataOutputStream(ss.getOutputStream());
+            DataInputStream inServer = new DataInputStream(ss.getInputStream());
+            DataOutputStream outServer = new DataOutputStream(ss.getOutputStream());
 
             //Aqui incluir print de inicio Distribuidor
             Tunel tunel = new Tunel();
@@ -45,28 +45,26 @@ public class Distribuidor1 {
             //thread3
             while (true) {
                 System.out.println("Conectando..."); 
-                Scanner scanner2 = new Scanner(System.in);
-                String input = scanner2.nextLine();
-                
-                outSocket.writeUTF(input);
-                
-                System.out.println("Ha ingresado: " + input);
-                //outSocket
+                              
+                String serverIn = inServer.readUTF();
+                System.out.println("Servidor envio: " + serverIn);
                 
                 
                 Socket sc = listener.accept();
                 tunel.setServidor(sc);
-                System.out.println("Empieza a escuchar un surtidor");
-
                 
-                //Envio y recibir datos para ServerSocket
                 DataInputStream in = new DataInputStream(sc.getInputStream());
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
-                //fin
+                                
+                out.writeUTF(serverIn);                
+                System.out.println("Se ha enviado al surtidor: " + serverIn);
+               
                 
                 String inSurtidor = in.readUTF();
-                System.out.println("Escuchado del surtidor: " + inSurtidor);
-                               
+                
+                outServer.writeUTF(inSurtidor);               
+                System.out.println("Enviado al surtidor: " + inSurtidor);
+                                               
                 //recibir modo en lab
 
                 if (tunel.hasServidor()) {
@@ -74,7 +72,7 @@ public class Distribuidor1 {
                     t.start();
                     break;
                 }
-                System.out.println("6");
+                //System.out.println("6");
 
             }
             t.join();

@@ -25,11 +25,11 @@ public class Surtidor {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             
             while(true){
-                Scanner s = new Scanner(System.in);
-                String str = s.nextLine();
-
-                out.writeUTF(str);
-                System.out.println("Enviado: " + str);
+                String inSocket = in.readUTF();
+                System.out.println("Desde el Distribuidor llega: " + inSocket);
+                
+                String con = "Conectado";
+                out.writeUTF(con);
             }
         }
         catch(IOException e){
