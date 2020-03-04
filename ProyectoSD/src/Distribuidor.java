@@ -44,14 +44,13 @@ public class Distribuidor {
             //thread2
             //thread3
             while (true) {
-                System.out.println("Conectando..."); 
-                              
+                System.out.println("Conectado"); 
+                Socket sc = listener.accept();
+                tunel.setServidor(sc);   
+                System.out.println("Se ha conectado: " + listener.getLocalSocketAddress());
+                
                 String serverIn = inServer.readUTF();
                 System.out.println("Servidor envio: " + serverIn);
-                
-                
-                Socket sc = listener.accept();
-                tunel.setServidor(sc);
                 
                 DataInputStream in = new DataInputStream(sc.getInputStream());
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
@@ -63,7 +62,7 @@ public class Distribuidor {
                 String inSurtidor = in.readUTF();
                 
                 outServer.writeUTF(inSurtidor);               
-                System.out.println("Enviado al surtidor: " + inSurtidor);
+                System.out.println("Enviado del surtidor: " + inSurtidor);
                                                
                 //recibir modo en lab
 
