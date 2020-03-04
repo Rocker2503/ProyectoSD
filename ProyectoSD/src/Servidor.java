@@ -24,12 +24,14 @@ import java.util.logging.Logger;
 public class Servidor {
 
     public static void main(String[] args) throws UnknownHostException {
-        int port = 10013;
+        int port = 49775;
         String ip = "127.0.0.1";
-        InetAddress addr = InetAddress.getByName(ip);
+        InetAddress addr = InetAddress.getByName(ip); 
 
 // and now you can pass it to your socket-constructor
-        try (ServerSocket listener = new ServerSocket(port, 0, addr)) {
+        try {
+            ServerSocket listener = new ServerSocket(port, 0, addr);
+            System.out.println("puerto: " + listener.getLocalSocketAddress());
             System.out.println("Servidor iniciado y escuchando en el puerto " + port);
             Tunel tunel = new Tunel();
             //t2
@@ -47,12 +49,12 @@ public class Servidor {
                 DataInputStream in = new DataInputStream(sc.getInputStream());
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
 
-                Scanner scanner = new Scanner(System.in);
-                int modo2 = scanner.nextInt();
+                //Scanner scanner = new Scanner(System.in);
+                //int modo2 = scanner.nextInt();
                 
-                out.writeInt(modo2);
+                //out.writeInt(modo2);
                 //recibir modo en lab
-                int modo = in.readInt();
+                String modo = in.readUTF();
                 System.out.println("El modo recibido es " + modo);
                 tunel.setServidor(sc);
                 System.out.println("5");
