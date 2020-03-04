@@ -25,7 +25,8 @@ public class Servidor {
 
     public static void main(String[] args) throws UnknownHostException {
         int port = 49775;
-        String ip = "127.0.0.1";
+        String ip = "25.49.16.34";
+        //InetAddress ad = InetAddress.getLocalHost();
         InetAddress addr = InetAddress.getByName(ip); 
 
 // and now you can pass it to your socket-constructor
@@ -42,21 +43,29 @@ public class Servidor {
             while (true) {
                 System.out.println("1");
                 Socket sc = listener.accept();
+                tunel.setServidor(sc);
+                
                 System.out.println("2");
 
                 System.out.println("Cliente " + sc.getRemoteSocketAddress() + " se ha conectado");
-                //mandar 
                 DataInputStream in = new DataInputStream(sc.getInputStream());
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
 
-                //Scanner scanner = new Scanner(System.in);
-                //int modo2 = scanner.nextInt();
                 
-                //out.writeInt(modo2);
-                //recibir modo en lab
+                
+                //Configuración inicial
+                
+                Scanner scanner = new Scanner(System.in);
+                String input = scanner.nextLine();
+                
+                //Manda mensaje al distribuidor
+                out.writeUTF(input);
+                System.out.println("Escribe al distribuidor: " + input);
+                
+                //Espera respuesta del distribuidor
                 String modo = in.readUTF();
-                System.out.println("El modo recibido es " + modo);
-                tunel.setServidor(sc);
+                System.out.println("El mensaje recibido es: " + modo);
+                
                 System.out.println("5");
 
                 if (tunel.hasServidor()) {
