@@ -5,9 +5,7 @@
  */
 
 import java.io.DataInputStream;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -24,46 +22,52 @@ import java.util.logging.Logger;
 public class Distribuidor1 {
 
     public static void main(String[] args) throws UnknownHostException, IOException {
-        int port = 10013;
+        int port = 49775;
         String ip = "127.0.0.1";
         String ip2 = "127.0.0.2";
+        int listenPort = 69;
         InetAddress addr = InetAddress.getByName(ip2);
 
 // and now you can pass it to your socket-constructor
-        try (ServerSocket listener = new ServerSocket(port, 0, addr)) {
-        
+        try{
+            
             Socket ss = new Socket(ip, port);
+            ServerSocket listener = new ServerSocket(listenPort, 0, addr);
             DataInputStream inSocket = new DataInputStream(ss.getInputStream());
             DataOutputStream outSocket = new DataOutputStream(ss.getOutputStream());
 
-            System.out.println("Servidor iniciado y escuchando en el puerto " + port);
+            //Aqui incluir print de inicio Distribuidor
             Tunel tunel = new Tunel();
-            //t2
-            //t3
+            //tunel2
+            //tunel3
             Thread t = new Thread(tunel);
-            //th2
-            //th3
+            //thread2
+            //thread3
             while (true) {
-                System.out.println("1");
+                System.out.println("Conectando..."); 
+                Scanner scanner2 = new Scanner(System.in);
+                String input = scanner2.nextLine();
+                
+                outSocket.writeUTF(input);
+                
+                System.out.println("Ha ingresado: " + input);
                 //outSocket
+                
+                
                 Socket sc = listener.accept();
-                System.out.println("2");
+                tunel.setServidor(sc);
+                System.out.println("Empieza a escuchar un surtidor");
 
-                System.out.println("Cliente " + sc.getRemoteSocketAddress() + " se ha conectado");
-                //mandar 
+                
+                //Envio y recibir datos para ServerSocket
                 DataInputStream in = new DataInputStream(sc.getInputStream());
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
-
-                Scanner scanner = new Scanner(System.in);
-                int modo2 = scanner.nextInt();
+                //fin
                 
-                outSocket.writeInt(modo2);
-                out.writeInt(modo2);
+                String inSurtidor = in.readUTF();
+                System.out.println("Escuchado del surtidor: " + inSurtidor);
+                               
                 //recibir modo en lab
-                int modo = in.readInt();
-                System.out.println("El modo recibido es " + modo);
-                tunel.setServidor(sc);
-                System.out.println("5");
 
                 if (tunel.hasServidor()) {
                     System.out.println("Thread start");
