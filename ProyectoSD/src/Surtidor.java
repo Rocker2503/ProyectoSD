@@ -16,11 +16,12 @@ public class Surtidor {
     
     public static void main(String[] args) {
         
-        String ip = "127.0.0.2";
+        String ip = "25.49.55.58";
         int port = 69;
         
         try{
             Socket socket = new Socket(ip,port);
+            System.out.println("info socket: " + socket.getInetAddress());
             DataInputStream in = new DataInputStream(socket.getInputStream());
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             

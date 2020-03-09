@@ -25,9 +25,11 @@ public class Servidor {
 
     public static void main(String[] args) throws UnknownHostException {
         int port = 49775;
-        String ip = "25.49.16.34";
+        String ip = "25.48.255.90";
+        //ConexionBDServidor context = new ConexionBDServidor();
         //InetAddress ad = InetAddress.getLocalHost();
         InetAddress addr = InetAddress.getByName(ip); 
+        //context.insertarDistribuidor("INSERT INTO distribuidores(id,nombre) VALUES('1','San Javier')");
 
 // and now you can pass it to your socket-constructor
         try {
@@ -65,6 +67,7 @@ public class Servidor {
                 //Espera respuesta del distribuidor
                 String modo = in.readUTF();
                 System.out.println("El mensaje recibido es: " + modo);
+                
                 
                 System.out.println("5");
 
