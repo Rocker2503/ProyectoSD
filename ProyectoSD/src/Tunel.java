@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class Tunel implements Runnable {
 
     private Socket servidor;
-    //private Socket listener;
+    private Socket flag;
 
     public Tunel() {
 
@@ -36,6 +36,10 @@ public class Tunel implements Runnable {
     public synchronized void setServidor(Socket servidor) {
         this.servidor = servidor;
     }
+    
+    void setFlag(Socket flag) {
+        this.flag = flag;
+    }
 
     /*public synchronized void setListener(Socket listener) {
         this.listener = listener;
@@ -45,13 +49,21 @@ public class Tunel implements Runnable {
     public void run() {
         DataInputStream is = null;
         DataOutputStream os = null;
+        DataInputStream isFlag = null;
+        DataOutputStream osFlag = null;
         try {
             is = new DataInputStream(servidor.getInputStream());
             os = new DataOutputStream(servidor.getOutputStream());
+            
+            isFlag = new DataInputStream(flag.getInputStream());
+            osFlag = new DataOutputStream(flag.getOutputStream());
+            
             String line;
 
             while ((line = is.readUTF()).compareTo("close") != 0) {
                 System.out.println("Sender envia : " + line);
+                //indica que lea del servidor
+                osFlag.writeUTF("1");
                 os.writeUTF(line);
             }
         } catch (IOException ex) {

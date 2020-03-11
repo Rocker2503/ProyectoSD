@@ -20,6 +20,7 @@ public class TunelDistribuidor implements Runnable {
 
     private Socket servidor;
     private Socket surtidor;
+    private Socket flag;
 
     public TunelDistribuidor() {
 
@@ -30,7 +31,7 @@ public class TunelDistribuidor implements Runnable {
     }*/
     
     public synchronized boolean hasServidor() {
-        return servidor != null && surtidor != null;
+        return servidor != null && surtidor != null && flag != null;
     }
 
     public synchronized void setServidor(Socket servidor) {
@@ -44,6 +45,10 @@ public class TunelDistribuidor implements Runnable {
     public synchronized void setSurtidor(Socket surtidor) {
         this.surtidor = surtidor;
     }
+    
+    void setFlag(Socket flag) {
+        this.flag = flag;
+    }
 
     /*public synchronized void setListener(Socket listener) {
         this.listener = listener;
@@ -56,25 +61,37 @@ public class TunelDistribuidor implements Runnable {
         
         DataInputStream isSurtidor = null;
         DataOutputStream osSurtidor = null;
+        
+        DataInputStream isFlag = null;
+        DataOutputStream osFlag = null;
         try {
             isServidor = new DataInputStream(servidor.getInputStream());
             osServidor = new DataOutputStream(servidor.getOutputStream());
             
             isSurtidor = new DataInputStream(surtidor.getInputStream());
             osSurtidor = new DataOutputStream(surtidor.getOutputStream());
-            String line;
             
+            isFlag = new DataInputStream(flag.getInputStream());
+            osFlag = new DataOutputStream(flag.getOutputStream());
+            
+            String line;
+            String flag;
             while(true){
             //while (!(line = isServidor.readUTF()).isEmpty() || !(line = isSurtidor.readUTF()).isEmpty()) {
-                if((line = isServidor.readUTF()).isEmpty() ){
-                    line = isSurtidor.readUTF();
-                }
-                if((line = isSurtidor.readUTF()).isEmpty() ){
+                if((flag = isFlag.readUTF()).equals("1") ){
                     line = isServidor.readUTF();
+                    
+                    System.out.println("Servidor envia : " + line);
+                    //osServidor.writeUTF(line);
+                    osSurtidor.writeUTF(line);
                 }
-                System.out.println("Sender envia : " + line);
-                osServidor.writeUTF(line);
-                osSurtidor.writeUTF(line);
+                else if((flag = isFlag.readUTF()).equals("2") ){
+                    line = isSurtidor.readUTF();
+                    System.out.println("Surtidor envia : " + line);
+                    osServidor.writeUTF(line);
+                    //osSurtidor.writeUTF(line);
+                }
+                
             }
         } catch (IOException ex) {
             Logger.getLogger(Tunel.class.getName()).log(Level.SEVERE, null, ex);

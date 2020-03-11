@@ -32,8 +32,8 @@ public class Servidor {
         
         ConexionBDServidor context = new ConexionBDServidor();
         InetAddress ad = InetAddress.getLocalHost();
-        InetAddress addr = InetAddress.getByName(ipJuan); 
-        context.insertUpdateBD("INSERT INTO distribuidores(id,nombre) VALUES('1','San Javier')");
+        InetAddress addr = InetAddress.getByName(ipAlvaro); 
+        //context.insertUpdateBD("INSERT INTO distribuidores(id,nombre) VALUES('1','San Javier')");
 
 // and now you can pass it to your socket-constructor
         try {
@@ -49,7 +49,13 @@ public class Servidor {
             while (true) {
                 System.out.println("1");
                 Socket sc = listener.accept();
+                
+                Socket flag = new Socket(ipJuan, port);
+                DataInputStream inFlag = new DataInputStream(flag.getInputStream());
+                DataOutputStream outFlag = new DataOutputStream(flag.getOutputStream());
+            
                 tunel.setServidor(sc);
+                tunel.setFlag(flag);
                 
                 System.out.println("2");
 
@@ -74,7 +80,19 @@ public class Servidor {
                 
                 
                 System.out.println("5");
+                
+                Scanner scanner2 = new Scanner(System.in);
+                System.out.println("escribeee:");
 
+                String input2 = scanner2.nextLine();
+                while(!input2.isEmpty())
+                {
+                    System.out.println("escribe");
+                    input2 = scanner2.nextLine();
+                    out.writeUTF(input2);
+
+                }
+                
                 if (tunel.hasServidor()) {
                     System.out.println("Thread start");
                     t.start();

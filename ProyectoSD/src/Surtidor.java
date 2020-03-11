@@ -24,10 +24,18 @@ public class Surtidor {
         int port = 69;
         
         try{
-            Socket socket = new Socket(ip,port);
+            Socket socket = new Socket(ipJuan,port);
+            Socket flag = new Socket(ipJuan, port);
+            
             System.out.println("info socket: " + socket.getInetAddress());
+            
             DataInputStream in = new DataInputStream(socket.getInputStream());
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            
+            DataInputStream inFlag = new DataInputStream(flag.getInputStream());
+            DataOutputStream outFlag = new DataOutputStream(flag.getOutputStream());
+            
+            String line;
             
             while(true){
                 String inSocket = in.readUTF();
@@ -35,6 +43,13 @@ public class Surtidor {
                 
                 String con = "Conectado";
                 out.writeUTF(con);
+                
+                Scanner scan = new Scanner(System.in);
+                String mensaje = scan.nextLine();
+                
+                outFlag.writeUTF("2");
+                out.writeUTF(mensaje);
+
             }
         }
         catch(IOException e){

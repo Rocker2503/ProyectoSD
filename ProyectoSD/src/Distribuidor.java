@@ -34,8 +34,7 @@ public class Distribuidor {
         //context.insertUpdateBD("INSERT INTO precio(id,precio) VALUES('1','1000')");
 
 // and now you can pass it to your socket-constructor
-        try{
-            
+        try{            
             Socket ss = new Socket(ipAlvaro, port);
             ServerSocket listener = new ServerSocket(listenPort, 0, addr);
             DataInputStream inServer = new DataInputStream(ss.getInputStream());
@@ -51,12 +50,18 @@ public class Distribuidor {
             while (true) {
                 System.out.println("Conectado"); 
                 Socket sc = listener.accept();
+                Socket flag = new Socket(ipJuan, port);
+            
                 tunel.setServidor(sc);   
                 tunel.setSurtidor(ss);
+                tunel.setFlag(flag);
                 System.out.println("Se ha conectado: " + listener.getLocalSocketAddress());
                 
                 DataInputStream in = new DataInputStream(sc.getInputStream());
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
+                
+                DataInputStream inFlag = new DataInputStream(flag.getInputStream());
+                DataOutputStream outFlag = new DataOutputStream(flag.getOutputStream());
                 
                 String serverIn = inServer.readUTF();
                 System.out.println("Servidor envio: " + serverIn);
