@@ -30,7 +30,7 @@ public class Tunel implements Runnable {
     }*/
     
     public synchronized boolean hasServidor() {
-        return servidor != null;
+        return servidor != null && flag != null;
     }
 
     public synchronized void setServidor(Socket servidor) {
