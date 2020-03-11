@@ -73,16 +73,8 @@ public class Distribuidor {
                                                
                 
                 //probando escucha modo servidor o surtidor
-                /*int flag = 0;
-                while(flag != 1){
-                    if(!inServer.readUTF().isEmpty() || !in.readUTF().isEmpty() )
-                    {
-                        System.out.println("escucha algo");
-                        flag = 1;
-                    }
-                }
-                flag = 0;*/
-
+                
+                
                 if (tunel.hasServidor()) {
                     System.out.println("Thread start");
                     t.start();

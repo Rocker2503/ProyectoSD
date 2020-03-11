@@ -9,6 +9,7 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,22 +65,34 @@ public class TunelDistribuidor implements Runnable {
             osSurtidor = new DataOutputStream(surtidor.getOutputStream());
             String line;
             
+            Scanner scanner = new Scanner(System.in);
+            int modo;
+            do {
+                System.out.println("Ingrese en que modo quiere ingresar");
+                System.out.println("1 - Modo Servidor");
+                System.out.println("2 - Modo Surtidor");
+                modo = scanner.nextInt();
+            } while (modo != 1 && modo != 2);
+
             while(true){
-            //while (!(line = isServidor.readUTF()).isEmpty() || !(line = isSurtidor.readUTF()).isEmpty()) {
-                if((line = isServidor.readUTF()).isEmpty() ){
-                    line = isSurtidor.readUTF();
+                switch (modo) {
+                    case 1:
+                        while ((line = isServidor.readUTF()).compareTo("0") != 0) {
+                            System.out.println("El programa esta escuchando al servidor: " + line);
+                        }
+                        modo = 2;
+                        break;
+                    case 2:
+                        while ((line = isSurtidor.readUTF()).compareTo("0") != 0) {
+                            System.out.println("El programa esta escuchando al surtidor: " + line);
+                            osServidor.writeUTF(line);
+                        }
+                        modo = 1;
+                        break;
                 }
-                if((line = isSurtidor.readUTF()).isEmpty() ){
-                    line = isServidor.readUTF();
-                }
-                System.out.println("Sender envia : " + line);
-                osServidor.writeUTF(line);
-                osSurtidor.writeUTF(line);
             }
         } catch (IOException ex) {
-            Logger.getLogger(Tunel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TunelDistribuidor.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
 }
