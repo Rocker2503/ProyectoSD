@@ -20,10 +20,20 @@ public class SurtidorMenu extends Thread{
         
     Socket sucursal;
     Scanner scanner;
+    int precio93;
+    int precio95;
+    int precio97;
+    int diesel;
+    int kerosene;
     
-    public SurtidorMenu(Socket s){
+    public SurtidorMenu(Socket s, int precio93, int precio95, int precio97, int diesel, int kerosene){
         this.sucursal = s;
         this.scanner = new Scanner(System.in);
+        this.precio93 = precio93;
+        this.precio95 = precio95;
+        this.precio97 = precio97;
+        this.diesel = diesel;
+        this.kerosene = kerosene;
     }    
     
     @Override
@@ -54,23 +64,28 @@ public class SurtidorMenu extends Thread{
                  
                  switch(opcion){
                      case 1: 
-                        msj = "Gas93" + " " + lt; 
+                        msj = "Gas93" + " " + lt + " " + Integer.toString(this.precio93) + " " + hoy;
+                        System.out.println("msj: " + msj);
                         dos.writeUTF(msj);
                         break;
                      case 2:
-                        msj = "Gas95" + " " + lt; 
+                        msj = "Gas95" + " " + lt + " " + Integer.toString(this.precio95) + " " + hoy; 
+                        System.out.println("msj: " + msj);
                         dos.writeUTF(msj);
                         break;
                      case 3:
-                        msj = "Gas97" + " " + lt; 
+                        msj = "Gas97" + " " + lt + " " + Integer.toString(this.precio95) + " " + hoy; 
+                        System.out.println("msj: " + msj);
                         dos.writeUTF(msj);
                         break;
                      case 4:
-                        msj = "Diesel" + " " + lt; 
+                        msj = "Diesel" + " " + lt + " " + Integer.toString(this.diesel) + " " + hoy; 
+                        System.out.println("msj: " + msj);
                         dos.writeUTF(msj);
                         break;
                      case 5:
-                        msj = "Kerosene" + " " + lt; 
+                        msj = "Kerosene" + " " + lt + " " + Integer.toString(this.kerosene)+ " " + hoy; 
+                        System.out.println("msj: " + msj);
                         dos.writeUTF(msj);
                         break;
                  }
