@@ -49,8 +49,9 @@ public class Tunel extends Thread {
             DataInputStream dis = new DataInputStream(listener.getInputStream());
             while(!listener.isClosed()){
                 msj = dis.readUTF();
-                System.out.println("Desde el Distribuidor: " + msj);
-                context.insertUpdateBD(msj);
+                String query = msj.replace("venta", "venta_general");
+                System.out.println("Desde el Distribuidor: " + query);
+                context.insertUpdateBD(query);
             }
         }
         catch(IOException ex){
