@@ -30,7 +30,7 @@ public class Surtidor {
         String ipAlvaro = "25.49.55.58";
         ArrayList<String> ventas = new ArrayList<String>();
         
-        String ip = ipNico;
+        String ip = ipAlvaro;
         int port = 69;
                 
         try{
