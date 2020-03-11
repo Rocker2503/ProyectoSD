@@ -23,6 +23,7 @@ public class TunelSurtidor extends Thread {
     private Socket surtidor;
 
     public TunelSurtidor(Socket server, Socket surtidor) {
+        this.surtidor = surtidor;
 
     }
 
@@ -58,8 +59,8 @@ public class TunelSurtidor extends Thread {
         DataInputStream isSurtidor = null;
         DataOutputStream osSurtidor = null;
         try {
-            isServidor = new DataInputStream(servidor.getInputStream());
-            osServidor = new DataOutputStream(servidor.getOutputStream());
+            //isServidor = new DataInputStream(servidor.getInputStream());
+            //osServidor = new DataOutputStream(servidor.getOutputStream());
             
             isSurtidor = new DataInputStream(surtidor.getInputStream());
             osSurtidor = new DataOutputStream(surtidor.getOutputStream());

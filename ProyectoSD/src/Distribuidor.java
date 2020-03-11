@@ -29,7 +29,7 @@ public class Distribuidor {
         String ipJuan = "25.49.16.34";
         String ipAlvaro = "25.49.55.58";
         
-        String ip = ipNico;
+        String ip = ipJuan;
         
         int listenPort = 69;
         
@@ -58,7 +58,7 @@ public class Distribuidor {
                 surtidor = serverDistribuidor.accept();
                 System.out.println("Se ha conectado: " + surtidor.getLocalSocketAddress());
                 
-                //tunelDistribuidor.setServidor(surtidor);  
+                tunelDistribuidor.setServidor(surtidor);  
                 
                 tunelDistribuidor.enlazarSurtidor(surtidor);
                 surtidores.add(surtidor);
