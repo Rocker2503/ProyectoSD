@@ -9,6 +9,7 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,9 +22,12 @@ public class TunelSurtidor extends Thread {
 
     private Socket servidor;
     private Socket surtidor;
+    ConexionBDDistribuidor context;
 
-    public TunelSurtidor(Socket server, Socket surtidor) {
+    public TunelSurtidor(Socket servidor, Socket surtidor) {
+        this.servidor = servidor;
         this.surtidor = surtidor;
+        this.context = new ConexionBDDistribuidor();
 
     }
 
@@ -59,17 +63,41 @@ public class TunelSurtidor extends Thread {
         DataInputStream isSurtidor = null;
         DataOutputStream osSurtidor = null;
         try {
-            //isServidor = new DataInputStream(servidor.getInputStream());
-            //osServidor = new DataOutputStream(servidor.getOutputStream());
+            isServidor = new DataInputStream(servidor.getInputStream());
+            osServidor = new DataOutputStream(servidor.getOutputStream());
             
             isSurtidor = new DataInputStream(surtidor.getInputStream());
             osSurtidor = new DataOutputStream(surtidor.getOutputStream());
             
-            while(hasServidor())
+            while((!servidor.isClosed()) && (!surtidor.isClosed()) )
             {
+                //Recibe venta
                 String mensaje = isSurtidor.readUTF();
-            }
-            
+                
+                String[] venta = mensaje.split(" ");
+                
+                String tipo = venta[0];
+                String litros = venta[1];
+                String precio = venta[2];
+                String hoy = venta[3];
+                //System.out.println("Variables: " + tipo + " " + litros + " " + precio + " " + hoy);
+                
+                int precioInt = Integer.parseInt(precio);
+                int litrosInt = Integer.parseInt(litros);
+                
+                
+                int total = litrosInt*precioInt;
+                
+                System.out.println("Venta: " + tipo + ", " + litros + ", " + precio + ", " + hoy);
+                
+                //Actualizar venta BD  
+
+                String query = String.format("INSERT INTO venta(fecha,tipo_combustible,litros, total) VALUES('%s', '%s', '%s', '%d')", hoy, tipo, litros, total);
+                //System.out.println("Query: " + query);
+                context.insertUpdateBD(query);
+                
+                osServidor.writeUTF(query);
+            }            
             /*String line;
             
             Scanner scanner = new Scanner(System.in);

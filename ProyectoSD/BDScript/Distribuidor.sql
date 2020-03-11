@@ -16,7 +16,7 @@ CREATE TABLE `venta` (
 -- Estructura de tabla para la tabla `Distribuidores`
 --
 
-CREATE TABLE `precio` (
+CREATE TABLE `precios` (
   `id` int NOT NULL ,
   `tipo_combustible` varchar(16) NOT NULL,
   `precio` int NOT NULL,

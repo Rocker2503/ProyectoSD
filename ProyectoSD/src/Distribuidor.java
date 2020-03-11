@@ -45,11 +45,11 @@ public class Distribuidor {
 // and now you can pass it to your socket-constructor
         try{
             serverDistribuidor = new ServerSocket(listenPort, 0, addr);
-            
             //DataInputStream inServer = serverDistribuidor.getInputStream();
             //DataOutputStream outServer = serverDistribuidor.getOutputStream();
 
-            //Aqui incluir print de inicio Distribuidor
+            //Aqui incluir print de inicio Distribuidor            
+
             tunelDistribuidor = new TunelDistribuidor();
             tunelDistribuidor.start();
             
@@ -58,28 +58,10 @@ public class Distribuidor {
                 surtidor = serverDistribuidor.accept();
                 System.out.println("Se ha conectado: " + surtidor.getLocalSocketAddress());
                 
-                tunelDistribuidor.setServidor(surtidor);  
+                //tunelDistribuidor.setServidor(surtidor);  
                 
                 tunelDistribuidor.enlazarSurtidor(surtidor);
                 surtidores.add(surtidor);
-                
-                //Configuracion inicial
-                DataInputStream in = new DataInputStream(surtidor.getInputStream());
-                DataOutputStream out = new DataOutputStream(surtidor.getOutputStream());
-                
-                String serverIn = in.readUTF();
-                System.out.println("Servidor envio: " + serverIn);
-                
-                                
-                out.writeUTF(serverIn);                
-                System.out.println("Se ha enviado al surtidor: " + serverIn);
-               
-                
-                String inSurtidor = in.readUTF();
-                
-                out.writeUTF(inSurtidor);               
-                System.out.println("Enviado del surtidor: " + inSurtidor);
-
             }
             //t.join();
             surtidor.close();
