@@ -1,4 +1,6 @@
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -15,15 +17,15 @@ import java.util.Scanner;
  * @author Nicolas
  */
 public class ServidorMenu extends Thread{
-    private ArrayList<Socket> sucursales;
+    private ArrayList<Socket> distribuidores;
     private ServerSocket servidor;
-    private Scanner sc;
+    private Scanner scanner;
     private ConexionBDServidor context;
     
     public ServidorMenu(ServerSocket s){
         this.servidor = s;
-        this.sucursales = new ArrayList<>();
-        this.sc = new Scanner(System.in);
+        this.distribuidores = new ArrayList<>();
+        this.scanner = new Scanner(System.in);
         this.context = new ConexionBDServidor();
     }
 
@@ -33,19 +35,16 @@ public class ServidorMenu extends Thread{
         while(true){
             System.out.println("1. Para obtener los reportes");
             System.out.println("2. Para actualizar precios");
-            System.out.println("3. Para salir");
             System.out.print("Ingresar opcion: ");
             
-            seleccion = sc.nextInt();
+            seleccion = scanner.nextInt();
             switch(seleccion){
-                case 1:
+                case 1: seleccion = 1;
                     generarReporte();
                     break;
-                case 2:
-                    //Actualizar precio
+                case 2: seleccion = 2;
+                    actualizarPrecios(this.distribuidores);
                     break;
-                case 3:
-                    //Salir
             }
         }
     }
@@ -55,14 +54,65 @@ public class ServidorMenu extends Thread{
         context.selectBD(query);
     }
     
-    public void actualizarPrecios(ArrayList<Socket> sucursales){
+    public void actualizarPrecios(ArrayList<Socket> dist){
+        int opcion;
+        System.out.println("Seleccione combustible que quiere actualizar: ");
+        System.out.println("1. Gasolina 93");
+        System.out.println("2. Gasolina 95");
+        System.out.println("3. Gasolina 97");
+        System.out.println("4. Diesel");
+        System.out.println("5. Kerosene");
+        opcion = scanner.nextInt();
         
+        System.out.println("Ingrese el precio");
+        int precio = scanner.nextInt();
+        String query;
+        
+        switch(opcion){
+            case 1: opcion = 1;
+                query = "UPDATE precios SET precio = " + Integer.toString(precio) + "WHERE tipo_combustible = Gas93";
+                context.insertUpdateBD(query);
+                actualizarTodo(query,dist);
+                break;
+            case 2: opcion = 2;
+                query = "UPDATE precios SET precio = " + Integer.toString(precio) + "WHERE tipo_combustible = Gas95";
+                context.insertUpdateBD(query);
+                actualizarTodo(query,dist);
+                break;
+            case 3: opcion = 3;
+                query = "UPDATE precios SET precio = " + Integer.toString(precio) + "WHERE tipo_combustible = Gas97";
+                context.insertUpdateBD(query);
+                actualizarTodo(query,dist);
+                break;
+            case 4: opcion = 4;
+                query = "UPDATE precios SET precio = " + Integer.toString(precio) + "WHERE tipo_combustible = Diesel";
+                context.insertUpdateBD(query);
+                actualizarTodo(query,dist);
+                break;
+            case 5: opcion = 5;
+                query = "UPDATE precios SET precio = " + Integer.toString(precio) + "WHERE tipo_combustible = Kerosene";
+                context.insertUpdateBD(query);
+                actualizarTodo(query,dist);
+                break;
+        }
     }
     
     public boolean agregarSocket(Socket s){
         System.out.println("Se agrega conexión a sucursal...");
-        return sucursales.add(s);
+        return distribuidores.add(s);
     }
     
+    public void actualizarTodo(String msj , ArrayList<Socket> dist){
+        try{
+            for(Socket s : dist){
+                DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+                System.out.println("Actualizacion : " + msj);
+                dos.writeUTF(msj);
+            }
+        }
+        catch(IOException ex){
+            ex.printStackTrace();
+        }
+    }
     
 }

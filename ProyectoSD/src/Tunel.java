@@ -19,9 +19,11 @@ import java.util.logging.Logger;
 public class Tunel extends Thread {
 
     private Socket listener;
+    ConexionBDServidor context;
 
     public Tunel(Socket s) {
         listener = s;
+        this.context = new ConexionBDServidor();
     }
 
     /*public synchronized boolean hasSenderAndListener() {
@@ -42,7 +44,18 @@ public class Tunel extends Thread {
 
     @Override
     public void run() {
-        
+        String msj;
+        try{
+            DataInputStream dis = new DataInputStream(listener.getInputStream());
+            while(!listener.isClosed()){
+                msj = dis.readUTF();
+                System.out.println("Desde el Distribuidor: " + msj);
+                context.insertUpdateBD(msj);
+            }
+        }
+        catch(IOException ex){
+            ex.printStackTrace();
+        }
 
     }
 

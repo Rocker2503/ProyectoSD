@@ -18,6 +18,7 @@ CREATE TABLE `venta` (
 
 CREATE TABLE `precio` (
   `id` int NOT NULL ,
+  `tipo_combustible` varchar(16) NOT NULL,
   `precio` int NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
