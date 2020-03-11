@@ -30,6 +30,7 @@ public class TunelDistribuidor extends Thread {
     
     ArrayList<TunelSurtidor> escuchaSurtidores;
     ArrayList<Socket> escuchaDistribuidor;
+    ConexionBDDistribuidor context;
 
     public TunelDistribuidor() throws IOException {
         
@@ -37,6 +38,7 @@ public class TunelDistribuidor extends Thread {
         escuchaDistribuidor = new ArrayList<>();
         
         servidor  = new Socket(ipAlvaro, port);
+        this.context = new ConexionBDDistribuidor();
 
     }
 
@@ -75,8 +77,15 @@ public class TunelDistribuidor extends Thread {
 
             while(hasServidor())
             {
+                //Recibe actualizacion precio
                 String mensaje = isServidor.readUTF();
                 System.out.println("Mensaje leido: "+mensaje);
+                
+                //Actualizar precio BD
+                context.insertUpdateBD(mensaje);
+                
+                //Mandar precio al surtidor
+                osServidor.writeUTF(mensaje);
             }
             /*
             String line;
@@ -117,7 +126,7 @@ public class TunelDistribuidor extends Thread {
         public void enlazarSurtidor(Socket nuevoSurtidor) throws IOException
         {
 
-            TunelSurtidor tunel = new TunelSurtidor(servidor, nuevoSurtidor);
+            TunelSurtidor tunel = new TunelSurtidor(this.servidor, nuevoSurtidor);
            //tunel.setSurtidor(nuevoSurtidor);
             tunel.start();
             escuchaSurtidores.add(tunel);
