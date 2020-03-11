@@ -27,37 +27,40 @@ public class Servidor {
         ArrayList<Tunel> listeners = new ArrayList<>();
         Tunel tunel = null;
         ServerSocket servidor = null;
-        Socket sc = null;
+        Socket distribuidor = null;
         
         ConexionBDServidor context = new ConexionBDServidor();
         InetAddress addr = InetAddress.getByName(ipJuan); 
 
         try{
             servidor = new ServerSocket(port,0,addr);
-            System.out.println("El servidor esta listo para recibir clientes");
             ServidorMenu menu = new ServidorMenu(servidor);
             
-            sc = servidor.accept();
+            distribuidor = servidor.accept();
+            System.out.println("El servidor esta listo para recibir distribuidores");
             
-            tunel = new Tunel(sc);
+            tunel = new Tunel(distribuidor);
+            tunel.setServidor(distribuidor);
             tunel.start();
             
             listeners.add(tunel);
-            menu.agregarSocket(sc);
+            menu.agregarSocket(distribuidor);
             menu.start();
             
-            while(!servidor.isClosed()){
-                sc = servidor.accept();
+            while(tunel.hasServidor()){
+                //Se espera un surtidor
+                distribuidor = servidor.accept();
                 System.out.println("Cliente se conecta al puerto");
                 
-                tunel = new Tunel(sc);
+                //Tunel del distribuidor
+                tunel = new Tunel(distribuidor);
                 
                 tunel.start();
                 
-                menu.agregarSocket(sc);
+                menu.agregarSocket(distribuidor);
             }
             
-            sc.close();
+            distribuidor.close();
         }
         catch(IOException ex){
             ex.printStackTrace();
