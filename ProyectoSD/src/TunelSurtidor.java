@@ -63,19 +63,16 @@ public class TunelSurtidor extends Thread {
         DataInputStream isSurtidor = null;
         DataOutputStream osSurtidor = null;
         try {
-            //isServidor = new DataInputStream(servidor.getInputStream());
-            //osServidor = new DataOutputStream(servidor.getOutputStream());
-            System.out.println("try data in/out");
+            isServidor = new DataInputStream(servidor.getInputStream());
+            osServidor = new DataOutputStream(servidor.getOutputStream());
+            
             isSurtidor = new DataInputStream(surtidor.getInputStream());
             osSurtidor = new DataOutputStream(surtidor.getOutputStream());
-            System.out.println("crea tunel servidor!");
             
-            while(hasServidor() )
+            while((!servidor.isClosed()) && (!surtidor.isClosed()) )
             {
-                System.out.println("walalala");
                 //Recibe venta
                 String mensaje = isSurtidor.readUTF();
-                System.out.println("venta desde surtidor: " + mensaje);
                 
                 String[] venta = mensaje.split(" ");
                 
@@ -83,9 +80,10 @@ public class TunelSurtidor extends Thread {
                 String litros = venta[1];
                 String precio = venta[2];
                 String hoy = venta[3];
+                //System.out.println("Variables: " + tipo + " " + litros + " " + precio + " " + hoy);
                 
-                int precioInt = Integer.getInteger(precio);
-                int litrosInt = Integer.getInteger(litros);
+                int precioInt = Integer.parseInt(precio);
+                int litrosInt = Integer.parseInt(litros);
                 
                 
                 int total = litrosInt*precioInt;
@@ -93,16 +91,13 @@ public class TunelSurtidor extends Thread {
                 System.out.println("Venta: " + tipo + ", " + litros + ", " + precio + ", " + hoy);
                 
                 //Actualizar venta BD  
-                
-                //context.insertBD("INSERT INTO distribuidores(id,nombre) VALUES('1','San Javier')");
 
                 String query = String.format("INSERT INTO venta(fecha,tipo_combustible,litros, total) VALUES('%s', '%s', '%s', '%d')", hoy, tipo, litros, total);
-                System.out.println("Query: " + query);
+                //System.out.println("Query: " + query);
                 context.insertUpdateBD(query);
                 
-                osSurtidor.writeUTF(mensaje);
-            }
-            
+                osServidor.writeUTF(query);
+            }            
             /*String line;
             
             Scanner scanner = new Scanner(System.in);

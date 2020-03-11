@@ -75,7 +75,7 @@ public class TunelDistribuidor extends Thread {
             isServidor = new DataInputStream(servidor.getInputStream());
             osServidor = new DataOutputStream(servidor.getOutputStream());
 
-            while(hasServidor())
+            while(!servidor.isClosed())
             {
                 //Recibe actualizacion precio
                 String mensaje = isServidor.readUTF();
@@ -125,12 +125,14 @@ public class TunelDistribuidor extends Thread {
     
         public void enlazarSurtidor(Socket nuevoSurtidor) throws IOException
         {
+            if(nuevoSurtidor == null)
+                return;
 
             TunelSurtidor tunel = new TunelSurtidor(this.servidor, nuevoSurtidor);
            //tunel.setSurtidor(nuevoSurtidor);
             tunel.start();
             escuchaSurtidores.add(tunel);
-            escuchaDistribuidor.add(nuevoSurtidor);
+            this.escuchaDistribuidor.add(nuevoSurtidor);
         }
     
         private void setPrecioSurtidores(String mensaje) throws IOException

@@ -58,13 +58,13 @@ public class Distribuidor {
                 surtidor = serverDistribuidor.accept();
                 System.out.println("Se ha conectado: " + surtidor.getLocalSocketAddress());
                 
-                tunelDistribuidor.setServidor(surtidor);  
+                //tunelDistribuidor.setServidor(surtidor);  
                 
                 tunelDistribuidor.enlazarSurtidor(surtidor);
                 surtidores.add(surtidor);
             }
             //t.join();
-            //surtidor.close();
+            surtidor.close();
         } catch (IOException ex) {
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
