@@ -39,10 +39,10 @@ public class ServidorMenu extends Thread{
             
             seleccion = scanner.nextInt();
             switch(seleccion){
-                case 1: seleccion = 1;
+                case 1: 
                     generarReporte();
                     break;
-                case 2: seleccion = 2;
+                case 2:
                     actualizarPrecios(this.distribuidores);
                     break;
             }
@@ -69,27 +69,27 @@ public class ServidorMenu extends Thread{
         String query;
         
         switch(opcion){
-            case 1: opcion = 1;
-                query = "UPDATE precios SET precio = " + Integer.toString(precio) + "WHERE tipo_combustible = Gas93";
+            case 1:
+                query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = Gas93";
                 context.insertUpdateBD(query);
                 actualizarTodo(query,dist);
                 break;
-            case 2: opcion = 2;
-                query = "UPDATE precios SET precio = " + Integer.toString(precio) + "WHERE tipo_combustible = Gas95";
+            case 2: 
+                query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = Gas95";
                 context.insertUpdateBD(query);
                 actualizarTodo(query,dist);
                 break;
-            case 3: opcion = 3;
-                query = "UPDATE precios SET precio = " + Integer.toString(precio) + "WHERE tipo_combustible = Gas97";
+            case 3: 
+                query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = Gas97";
                 context.insertUpdateBD(query);
                 actualizarTodo(query,dist);
                 break;
-            case 4: opcion = 4;
-                query = "UPDATE precios SET precio = " + Integer.toString(precio) + "WHERE tipo_combustible = Diesel";
+            case 4: 
+                query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = Diesel";
                 context.insertUpdateBD(query);
                 actualizarTodo(query,dist);
                 break;
-            case 5: opcion = 5;
+            case 5: 
                 query = "UPDATE precios SET precio = " + Integer.toString(precio) + "WHERE tipo_combustible = Kerosene";
                 context.insertUpdateBD(query);
                 actualizarTodo(query,dist);

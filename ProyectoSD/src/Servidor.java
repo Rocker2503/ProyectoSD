@@ -24,13 +24,15 @@ public class Servidor {
         String ipAlvaro = "25.49.55.58";
         int port = 49775;
         
+        String ip = ipNico;
+        
         ArrayList<Tunel> listeners = new ArrayList<>();
         Tunel tunel = null;
         ServerSocket servidor = null;
         Socket distribuidor = null;
         
         ConexionBDServidor context = new ConexionBDServidor();
-        InetAddress addr = InetAddress.getByName(ipJuan); 
+        InetAddress addr = InetAddress.getByName(ip); 
 
         try{
             servidor = new ServerSocket(port,0,addr);
