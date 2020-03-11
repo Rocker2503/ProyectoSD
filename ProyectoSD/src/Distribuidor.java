@@ -30,19 +30,19 @@ public class Distribuidor {
         
         int listenPort = 69;
         ConexionBDDistribuidor context = new ConexionBDDistribuidor();
-        InetAddress addr = InetAddress.getByName(ipNico);
-        context.insertUpdateBD("INSERT INTO precio(id,precio) VALUES('1','1000')");
+        InetAddress addr = InetAddress.getByName(ipJuan);
+        //context.insertUpdateBD("INSERT INTO precio(id,precio) VALUES('1','1000')");
 
 // and now you can pass it to your socket-constructor
         try{
             
-            Socket ss = new Socket(ipNico, port);
+            Socket ss = new Socket(ipAlvaro, port);
             ServerSocket listener = new ServerSocket(listenPort, 0, addr);
             DataInputStream inServer = new DataInputStream(ss.getInputStream());
             DataOutputStream outServer = new DataOutputStream(ss.getOutputStream());
 
             //Aqui incluir print de inicio Distribuidor
-            Tunel tunel = new Tunel();
+            TunelDistribuidor tunel = new TunelDistribuidor();
             //tunel2
             //tunel3
             Thread t = new Thread(tunel);
@@ -52,13 +52,15 @@ public class Distribuidor {
                 System.out.println("Conectado"); 
                 Socket sc = listener.accept();
                 tunel.setServidor(sc);   
+                tunel.setSurtidor(ss);
                 System.out.println("Se ha conectado: " + listener.getLocalSocketAddress());
+                
+                DataInputStream in = new DataInputStream(sc.getInputStream());
+                DataOutputStream out = new DataOutputStream(sc.getOutputStream());
                 
                 String serverIn = inServer.readUTF();
                 System.out.println("Servidor envio: " + serverIn);
                 
-                DataInputStream in = new DataInputStream(sc.getInputStream());
-                DataOutputStream out = new DataOutputStream(sc.getOutputStream());
                                 
                 out.writeUTF(serverIn);                
                 System.out.println("Se ha enviado al surtidor: " + serverIn);
@@ -69,7 +71,17 @@ public class Distribuidor {
                 outServer.writeUTF(inSurtidor);               
                 System.out.println("Enviado del surtidor: " + inSurtidor);
                                                
-                //recibir modo en lab
+                
+                //probando escucha modo servidor o surtidor
+                /*int flag = 0;
+                while(flag != 1){
+                    if(!inServer.readUTF().isEmpty() || !in.readUTF().isEmpty() )
+                    {
+                        System.out.println("escucha algo");
+                        flag = 1;
+                    }
+                }
+                flag = 0;*/
 
                 if (tunel.hasServidor()) {
                     System.out.println("Thread start");
