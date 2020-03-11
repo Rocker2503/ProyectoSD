@@ -118,6 +118,7 @@ public class TunelDistribuidor extends Thread {
         {
 
             TunelSurtidor tunel = new TunelSurtidor(servidor, nuevoSurtidor);
+           //tunel.setSurtidor(nuevoSurtidor);
             tunel.start();
             escuchaSurtidores.add(tunel);
             escuchaDistribuidor.add(nuevoSurtidor);
