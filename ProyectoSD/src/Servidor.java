@@ -41,26 +41,16 @@ public class Servidor {
             System.out.println("puerto: " + listener.getLocalSocketAddress());
             System.out.println("Servidor iniciado y escuchando en el puerto " + port);
             Tunel tunel = new Tunel();
-            //t2
-            //t3
             Thread t = new Thread(tunel);
-            //th2
-            //th3
+
             while (true) {
-                System.out.println("1");
                 Socket sc = listener.accept();
                 tunel.setServidor(sc);
                 
-                System.out.println("2");
-
                 System.out.println("Cliente " + sc.getRemoteSocketAddress() + " se ha conectado");
                 DataInputStream in = new DataInputStream(sc.getInputStream());
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
-
-                
-                
-                //Configuración inicial
-                
+                                                
                 Scanner scanner = new Scanner(System.in);
                 String input = scanner.nextLine();
                 
@@ -73,7 +63,6 @@ public class Servidor {
                 System.out.println("El mensaje recibido es: " + modo);
                 
                 
-                System.out.println("5");
 
                 if (tunel.hasServidor()) {
                     System.out.println("Thread start");
