@@ -31,10 +31,9 @@ CREATE TABLE `venta_general` (
 
 CREATE TABLE `precios` (
   `id` int NOT NULL ,
-  `id_dist` int NOT NULL,
+  `tipo_combustible` varchar(16) NOT NULL,
   `precio` int NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (id_dist) REFERENCES distribuidores(id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 

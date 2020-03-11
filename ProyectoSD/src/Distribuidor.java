@@ -29,6 +29,8 @@ public class Distribuidor {
         String ipJuan = "25.49.16.34";
         String ipAlvaro = "25.49.55.58";
         
+        String ip = ipNico;
+        
         int listenPort = 69;
         
         ArrayList<Socket> surtidores = new ArrayList<Socket>();
@@ -37,7 +39,7 @@ public class Distribuidor {
         TunelDistribuidor tunelDistribuidor;
         
         ConexionBDDistribuidor context = new ConexionBDDistribuidor();
-        InetAddress addr = InetAddress.getByName(ipJuan);
+        InetAddress addr = InetAddress.getByName(ip);
         //context.insertUpdateBD("INSERT INTO precio(id,precio) VALUES('1','1000')");
 
 // and now you can pass it to your socket-constructor
