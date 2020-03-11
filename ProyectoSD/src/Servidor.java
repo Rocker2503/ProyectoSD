@@ -4,18 +4,12 @@
  * and open the template in the editor.
  */
 
-import java.io.DataInputStream;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,53 +24,44 @@ public class Servidor {
         String ipAlvaro = "25.49.55.58";
         int port = 49775;
         
+        ArrayList<Tunel> listeners = new ArrayList<>();
+        Tunel tunel = null;
+        ServerSocket servidor = null;
+        Socket sc = null;
+        
         ConexionBDServidor context = new ConexionBDServidor();
-        InetAddress ad = InetAddress.getLocalHost();
         InetAddress addr = InetAddress.getByName(ipJuan); 
-        context.insertUpdateBD("INSERT INTO distribuidores(id,nombre) VALUES('1','San Javier')");
 
-// and now you can pass it to your socket-constructor
-        try {
-            ServerSocket listener = new ServerSocket(port, 0, addr);
-            System.out.println("puerto: " + listener.getLocalSocketAddress());
-            System.out.println("Servidor iniciado y escuchando en el puerto " + port);
-            Tunel tunel = new Tunel();
-            Thread t = new Thread(tunel);
-
-            while (true) {
-                Socket sc = listener.accept();
-                tunel.setServidor(sc);
+        try{
+            servidor = new ServerSocket(port,0,addr);
+            System.out.println("El servidor esta listo para recibir clientes");
+            ServidorMenu menu = new ServidorMenu(servidor);
+            
+            sc = servidor.accept();
+            
+            tunel = new Tunel(sc);
+            tunel.start();
+            
+            listeners.add(tunel);
+            menu.agregarSocket(sc);
+            menu.start();
+            
+            while(!servidor.isClosed()){
+                sc = servidor.accept();
+                System.out.println("Cliente se conecta al puerto");
                 
-                System.out.println("Cliente " + sc.getRemoteSocketAddress() + " se ha conectado");
-                DataInputStream in = new DataInputStream(sc.getInputStream());
-                DataOutputStream out = new DataOutputStream(sc.getOutputStream());
-                                                
-                Scanner scanner = new Scanner(System.in);
-                String input = scanner.nextLine();
+                tunel = new Tunel(sc);
                 
-                //Manda mensaje al distribuidor
-                out.writeUTF(input);
-                System.out.println("Escribe al distribuidor: " + input);
+                tunel.start();
                 
-                //Espera respuesta del distribuidor
-                String modo = in.readUTF();
-                System.out.println("El mensaje recibido es: " + modo);
-                
-                
-
-                if (tunel.hasServidor()) {
-                    System.out.println("Thread start");
-                    t.start();
-                    break;
-                }
-                System.out.println("6");
-
+                menu.agregarSocket(sc);
             }
-            t.join();
-        } catch (IOException ex) {
-            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+            
+            sc.close();
         }
+        catch(IOException ex){
+            ex.printStackTrace();
+        }
+        
     }
 }

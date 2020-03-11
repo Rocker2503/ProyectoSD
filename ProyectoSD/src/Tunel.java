@@ -16,13 +16,12 @@ import java.util.logging.Logger;
  *
  * @author gsanh
  */
-public class Tunel implements Runnable {
+public class Tunel extends Thread {
 
-    private Socket servidor;
-    //private Socket listener;
+    private Socket listener;
 
-    public Tunel() {
-
+    public Tunel(Socket s) {
+        listener = s;
     }
 
     /*public synchronized boolean hasSenderAndListener() {
@@ -30,11 +29,11 @@ public class Tunel implements Runnable {
     }*/
     
     public synchronized boolean hasServidor() {
-        return servidor != null;
+        return listener != null;
     }
 
     public synchronized void setServidor(Socket servidor) {
-        this.servidor = servidor;
+        this.listener = servidor;
     }
 
     /*public synchronized void setListener(Socket listener) {
@@ -43,20 +42,7 @@ public class Tunel implements Runnable {
 
     @Override
     public void run() {
-        DataInputStream is = null;
-        DataOutputStream os = null;
-        try {
-            is = new DataInputStream(servidor.getInputStream());
-            os = new DataOutputStream(servidor.getOutputStream());
-            String line;
-
-            while ((line = is.readUTF()).compareTo("close") != 0) {
-                System.out.println("Sender envia : " + line);
-                os.writeUTF(line);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(Tunel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
 
     }
 
