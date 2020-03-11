@@ -26,7 +26,7 @@ public class ConexionBDServidor {
         resultSet = null;
     }
     
-    public void insertarDistribuidor(String query){
+    public void insertBD(String query){
         try{
             connection = DriverManager.getConnection(BDURL, BD_USR, BD_PSW);
             statement = connection.createStatement();
@@ -36,6 +36,33 @@ public class ConexionBDServidor {
         }finally{
             try{
                 //resultSet.close();
+                statement.close();
+                connection.close();
+            }catch(SQLException ex){
+                
+            }
+            
+        }
+    }
+    
+    public void selectBD(String query){
+        try{
+            connection = DriverManager.getConnection(BDURL, BD_USR, BD_PSW);
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(query);
+            
+            while(resultSet.next() ){
+            System.out.printf("%s\t%s\t%s\t%f\n",
+                resultSet.getString(1));
+                /*resultSet.getString(2),
+                resultSet.getString(3),
+                resultSet.getFloat(4));*/
+            }
+        }
+        catch(SQLException ex){
+        }finally{
+            try{
+                resultSet.close();
                 statement.close();
                 connection.close();
             }catch(SQLException ex){
