@@ -28,13 +28,12 @@ public class Servidor {
         String ipNico = "25.48.255.90";
         String ipJuan = "25.49.16.34";
         String ipAlvaro = "25.49.55.58";
-        
         int port = 49775;
-        String ip = "25.49.55.58";
+        
         ConexionBDServidor context = new ConexionBDServidor();
         InetAddress ad = InetAddress.getLocalHost();
-        InetAddress addr = InetAddress.getByName(ip); 
-        context.insertBD("INSERT INTO distribuidores(id,nombre) VALUES('1','San Javier')");
+        InetAddress addr = InetAddress.getByName(ipJuan); 
+        context.insertUpdateBD("INSERT INTO distribuidores(id,nombre) VALUES('1','San Javier')");
 
 // and now you can pass it to your socket-constructor
         try {

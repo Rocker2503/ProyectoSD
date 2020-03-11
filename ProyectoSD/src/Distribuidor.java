@@ -28,15 +28,15 @@ public class Distribuidor {
         String ipJuan = "25.49.16.34";
         String ipAlvaro = "25.49.55.58";
         
-        String ip = "25.49.16.34";
-        String ip2 = "25.48.255.90";
         int listenPort = 69;
-        InetAddress addr = InetAddress.getByName(ip2);
+        ConexionBDDistribuidor context = new ConexionBDDistribuidor();
+        InetAddress addr = InetAddress.getByName(ipNico);
+        context.insertUpdateBD("INSERT INTO precio(id,precio) VALUES('1','1000')");
 
 // and now you can pass it to your socket-constructor
         try{
             
-            Socket ss = new Socket(ip, port);
+            Socket ss = new Socket(ipNico, port);
             ServerSocket listener = new ServerSocket(listenPort, 0, addr);
             DataInputStream inServer = new DataInputStream(ss.getInputStream());
             DataOutputStream outServer = new DataOutputStream(ss.getOutputStream());

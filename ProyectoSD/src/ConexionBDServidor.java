@@ -26,7 +26,7 @@ public class ConexionBDServidor {
         resultSet = null;
     }
     
-    public void insertBD(String query){
+    public void insertUpdateBD(String query){
         try{
             connection = DriverManager.getConnection(BDURL, BD_USR, BD_PSW);
             statement = connection.createStatement();
