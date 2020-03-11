@@ -33,13 +33,15 @@ public class ConexionBDServidor {
             statement.executeUpdate(query);
         }
         catch(SQLException ex){
+            System.out.println("ex: "+ex.getSQLState());
+            
         }finally{
             try{
                 //resultSet.close();
                 statement.close();
                 connection.close();
             }catch(SQLException ex){
-                
+                System.out.println("ex: "+ex.getSQLState());
             }
             
         }
