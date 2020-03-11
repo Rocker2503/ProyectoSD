@@ -11,6 +11,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,36 +30,42 @@ public class Distribuidor {
         String ipAlvaro = "25.49.55.58";
         
         int listenPort = 69;
+        
+        ArrayList<Socket> surtidores = new ArrayList<Socket>();
+        ServerSocket serverDistribuidor = null;
+        Socket surtidor = null;
+        TunelDistribuidor tunelDistribuidor;
+        
         ConexionBDDistribuidor context = new ConexionBDDistribuidor();
         InetAddress addr = InetAddress.getByName(ipJuan);
         //context.insertUpdateBD("INSERT INTO precio(id,precio) VALUES('1','1000')");
 
 // and now you can pass it to your socket-constructor
         try{
+            serverDistribuidor = new ServerSocket(listenPort, 0, addr);
             
-            Socket ss = new Socket(ipAlvaro, port);
-            ServerSocket listener = new ServerSocket(listenPort, 0, addr);
-            DataInputStream inServer = new DataInputStream(ss.getInputStream());
-            DataOutputStream outServer = new DataOutputStream(ss.getOutputStream());
+            //DataInputStream inServer = serverDistribuidor.getInputStream();
+            //DataOutputStream outServer = serverDistribuidor.getOutputStream();
 
             //Aqui incluir print de inicio Distribuidor
-            TunelDistribuidor tunel = new TunelDistribuidor();
-            //tunel2
-            //tunel3
-            Thread t = new Thread(tunel);
-            //thread2
-            //thread3
-            while (true) {
+            tunelDistribuidor = new TunelDistribuidor();
+            tunelDistribuidor.start();
+            
+            while(!serverDistribuidor.isClosed()){
                 System.out.println("Conectado"); 
-                Socket sc = listener.accept();
-                tunel.setServidor(sc);   
-                tunel.setSurtidor(ss);
-                System.out.println("Se ha conectado: " + listener.getLocalSocketAddress());
+                surtidor = serverDistribuidor.accept();
+                System.out.println("Se ha conectado: " + surtidor.getLocalSocketAddress());
                 
-                DataInputStream in = new DataInputStream(sc.getInputStream());
-                DataOutputStream out = new DataOutputStream(sc.getOutputStream());
+                //tunelDistribuidor.setServidor(surtidor);  
                 
-                String serverIn = inServer.readUTF();
+                tunelDistribuidor.enlazarSurtidor(surtidor);
+                surtidores.add(surtidor);
+                
+                //Configuracion inicial
+                DataInputStream in = new DataInputStream(surtidor.getInputStream());
+                DataOutputStream out = new DataOutputStream(surtidor.getOutputStream());
+                
+                String serverIn = in.readUTF();
                 System.out.println("Servidor envio: " + serverIn);
                 
                                 
@@ -68,25 +75,13 @@ public class Distribuidor {
                 
                 String inSurtidor = in.readUTF();
                 
-                outServer.writeUTF(inSurtidor);               
+                out.writeUTF(inSurtidor);               
                 System.out.println("Enviado del surtidor: " + inSurtidor);
-                                               
-                
-                //probando escucha modo servidor o surtidor
-                
-                
-                if (tunel.hasServidor()) {
-                    System.out.println("Thread start");
-                    t.start();
-                    break;
-                }
-                //System.out.println("6");
 
             }
-            t.join();
+            //t.join();
+            surtidor.close();
         } catch (IOException ex) {
-            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
             Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

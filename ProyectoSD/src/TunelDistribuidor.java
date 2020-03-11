@@ -9,6 +9,7 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,12 +18,25 @@ import java.util.logging.Logger;
  *
  * @author Juan
  */
-public class TunelDistribuidor implements Runnable {
+public class TunelDistribuidor extends Thread {
+    
+    String ipNico = "25.48.255.90";
+    String ipJuan = "25.49.16.34";
+    String ipAlvaro = "25.49.55.58";
+    int port = 49775;
 
     private Socket servidor;
-    private Socket surtidor;
+    //private Socket surtidor;
+    
+    ArrayList<TunelSurtidor> escuchaSurtidores;
+    ArrayList<Socket> escuchaDistribuidor;
 
-    public TunelDistribuidor() {
+    public TunelDistribuidor() throws IOException {
+        
+        escuchaSurtidores = new ArrayList<>();
+        escuchaDistribuidor = new ArrayList<>();
+        
+        servidor  = new Socket(ipAlvaro, port);
 
     }
 
@@ -31,20 +45,20 @@ public class TunelDistribuidor implements Runnable {
     }*/
     
     public synchronized boolean hasServidor() {
-        return servidor != null && surtidor != null;
+        return servidor != null;
     }
 
     public synchronized void setServidor(Socket servidor) {
         this.servidor = servidor;
     }
     
-    public synchronized boolean hasSurtidor() {
+    /*public synchronized boolean hasSurtidor() {
         return servidor != null;
     }
 
     public synchronized void setSurtidor(Socket surtidor) {
         this.surtidor = surtidor;
-    }
+    }*/
 
     /*public synchronized void setListener(Socket listener) {
         this.listener = listener;
@@ -54,15 +68,17 @@ public class TunelDistribuidor implements Runnable {
     public void run() {
         DataInputStream isServidor = null;
         DataOutputStream osServidor = null;
-        
-        DataInputStream isSurtidor = null;
-        DataOutputStream osSurtidor = null;
+
         try {
             isServidor = new DataInputStream(servidor.getInputStream());
             osServidor = new DataOutputStream(servidor.getOutputStream());
-            
-            isSurtidor = new DataInputStream(surtidor.getInputStream());
-            osSurtidor = new DataOutputStream(surtidor.getOutputStream());
+
+            while(hasServidor())
+            {
+                String mensaje = isServidor.readUTF();
+                System.out.println("Mensaje leido: "+mensaje);
+            }
+            /*
             String line;
             
             Scanner scanner = new Scanner(System.in);
@@ -90,9 +106,31 @@ public class TunelDistribuidor implements Runnable {
                         modo = 1;
                         break;
                 }
-            }
+            }*/
+            
+            
         } catch (IOException ex) {
-            Logger.getLogger(TunelDistribuidor.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TunelSurtidor.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+        public void enlazarSurtidor(Socket nuevoSurtidor) throws IOException
+        {
+
+            TunelSurtidor tunel = new TunelSurtidor(servidor, nuevoSurtidor);
+            tunel.start();
+            escuchaSurtidores.add(tunel);
+            escuchaDistribuidor.add(nuevoSurtidor);
+        }
+    
+        private void setPrecioSurtidores(String mensaje) throws IOException
+        {
+            DataOutputStream output = null;
+            for (int i = 0; i < this.escuchaDistribuidor.size(); i++)
+            {
+                output = new DataOutputStream(escuchaDistribuidor.get(i).getOutputStream());
+                output.writeUTF(mensaje);
+                
+            }
     }
 }
