@@ -16,6 +16,10 @@ public class Surtidor {
     
     public static void main(String[] args) {
         
+        String ipNico = "25.48.255.90";
+        String ipJuan = "25.49.16.34";
+        String ipAlvaro = "25.49.55.58";
+        
         String ip = "25.49.55.58";
         int port = 69;
         

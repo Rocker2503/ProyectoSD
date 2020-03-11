@@ -23,6 +23,11 @@ public class Distribuidor {
 
     public static void main(String[] args) throws UnknownHostException, IOException {
         int port = 49775;
+        
+        String ipNico = "25.48.255.90";
+        String ipJuan = "25.49.16.34";
+        String ipAlvaro = "25.49.55.58";
+        
         String ip = "25.49.16.34";
         String ip2 = "25.48.255.90";
         int listenPort = 69;
