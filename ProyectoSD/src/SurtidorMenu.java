@@ -65,6 +65,26 @@ public class SurtidorMenu extends Thread{
     {
         return precio95;
     }
+
+    public int getPrecio93()
+    {
+        return precio93;
+    }
+
+    public int getPrecio97()
+    {
+        return precio97;
+    }
+
+    public int getDiesel()
+    {
+        return diesel;
+    }
+
+    public int getKerosene()
+    {
+        return kerosene;
+    }
     
     
 

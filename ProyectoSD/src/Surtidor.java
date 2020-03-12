@@ -53,20 +53,41 @@ public class Surtidor {
                 String inSocket = in.readUTF();
                 System.out.println("Desde el Distribuidor llega: " + inSocket);
                 String[] venta = inSocket.split("precio =");
-                System.out.println("venta: "+venta[0]);
-                System.out.println("venta: "+venta[1]);
+                //System.out.println("venta: "+venta[0]);
+                //System.out.println("venta: "+venta[1]);
                 
                 String[] precio = venta[1].split("WHERE");
-                System.out.println("precio: "+precio[0]);
-                int pre = Integer.getInteger(precio[0]);
-                System.out.println("precio: "+precio[1]);
+                //System.out.println("precio: "+precio[0]);
+                int pre = Integer.parseInt(precio[0].replace(" ", ""));
+                //System.out.println("precio: "+precio[1]);
                 String[] combustible = precio[1].split("tipo_combustible = ");
                 System.out.println("Tipo combustible: "+combustible[1]);
                 String comb = combustible[1];
+                if(comb.equals("'Gas93'"))
+                {
+                    menu.setPrecio93(pre);
+                    System.out.println("precio 93: "+menu.getPrecio93());
+
+                }
                 if (comb.equals("'Gas95'"))
                 {
                    menu.setPrecio95(pre);
                     System.out.println("precio 95: "+menu.getPrecio95());
+                }
+                if (comb.equals("'Gas97'"))
+                {
+                   menu.setPrecio97(pre);
+                    System.out.println("precio 97: "+menu.getPrecio97());
+                }
+                if (comb.equals("'Kerosene'"))
+                {
+                   menu.setKerosene(pre);
+                    System.out.println("precio Ker: "+menu.getKerosene());
+                }
+                if (comb.equals("'Diesel'"))
+                {
+                   menu.setDiesel(pre);
+                    System.out.println("precio Dis: "+menu.getDiesel());
                 }
                 
 
