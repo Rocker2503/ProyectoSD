@@ -1,13 +1,3 @@
---
--- Estructura de tabla para la tabla `Distribuidores`
---
-
-CREATE TABLE `distribuidores` (
-  `id` int NOT NULL ,
-  `nombre` varchar(16) NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 
 
 --
@@ -16,13 +6,11 @@ CREATE TABLE `distribuidores` (
 
 CREATE TABLE `venta_general` (
   `id_venta` int NOT NULL AUTO_INCREMENT,
-  `id_distribuidor` int NOT NULL,
   `fecha` date NOT NULL,
   `tipo_combustible` varchar(16) DEFAULT NULL,
   `litros` int DEFAULT NULL,
   `total` int DEFAULT NULL,
   PRIMARY KEY (id_venta),
-  FOREIGN KEY (id_distribuidor) REFERENCES distribuidores(id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -36,6 +24,9 @@ CREATE TABLE `precios` (
   PRIMARY KEY (id),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
+INSERT into precios VALUES(1, "Gas93", 600)
+INSERT into precios VALUES(2, "Gas95", 600)
+INSERT into precios VALUES(3, "Gas97", 600)
+INSERT into precios VALUES(4, "Kerosene", 600)
+INSERT into precios VALUES(5, "Diesel", 600)
 
