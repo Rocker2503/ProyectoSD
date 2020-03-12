@@ -24,7 +24,7 @@ public class Servidor {
         String ipAlvaro = "25.49.55.58";
         int port = 49775;
         
-        String ip = ipAlvaro;
+        String ip = ipJuan;
         
         ArrayList<Tunel> listeners = new ArrayList<>();
         Tunel tunel = null;
@@ -50,7 +50,7 @@ public class Servidor {
             menu.agregarSocket(distribuidor);
             menu.start();
             
-            while(tunel.hasServidor()){
+            while(!servidor.isClosed()){
                 //Se espera un surtidor
                 distribuidor = servidor.accept();
                 System.out.println("Cliente se conecta al puerto");

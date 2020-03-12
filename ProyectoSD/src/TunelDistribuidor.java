@@ -24,6 +24,8 @@ public class TunelDistribuidor extends Thread {
     String ipJuan = "25.49.16.34";
     String ipAlvaro = "25.49.55.58";
     int port = 49775;
+    
+    String ip = ipJuan;
 
     private Socket servidor;
     //private Socket surtidor;
@@ -37,7 +39,7 @@ public class TunelDistribuidor extends Thread {
         escuchaSurtidores = new ArrayList<>();
         escuchaDistribuidor = new ArrayList<>();
         
-        servidor  = new Socket(ipAlvaro, port);
+        servidor  = new Socket(ip, port);
         this.context = new ConexionBDDistribuidor();
 
     }

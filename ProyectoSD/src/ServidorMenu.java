@@ -99,7 +99,7 @@ public class ServidorMenu extends Thread{
     }
     
     public boolean agregarSocket(Socket s){
-        System.out.println("Se agrega conexión a sucursal...");
+        System.out.println("Se agrega conexión a distribuidor");
         return distribuidores.add(s);
     }
     
