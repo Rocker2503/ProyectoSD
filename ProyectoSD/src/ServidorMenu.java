@@ -91,7 +91,7 @@ public class ServidorMenu extends Thread{
                 actualizarTodo(query,dist);
                 break;
             case 5: 
-                query = "UPDATE precios SET precio = " + Integer.toString(precio) + "WHERE tipo_combustible = 'Kerosene'";
+                query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = 'Kerosene'";
                 context.insertUpdateBD(query);
                 actualizarTodo(query,dist);
                 break;
