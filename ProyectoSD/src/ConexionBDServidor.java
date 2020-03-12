@@ -4,6 +4,7 @@ import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 /**
  *
@@ -53,11 +54,15 @@ public class ConexionBDServidor {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
             
+            System.out.println("Reporte global de ventas:");
             while(resultSet.next() ){
-            System.out.printf("%s\t%s\t%s\t%f\n",
-                resultSet.getString(1));
-                /*resultSet.getString(2),
-                resultSet.getString(3),
+                
+                String fecha = resultSet.getString("fecha");
+                String tipo = resultSet.getString("tipo_combustible");
+                String litros = resultSet.getString("litros");
+                String total = resultSet.getString("total");
+                System.out.printf("%s %s %s %s \n ", fecha, tipo, litros, total);
+                /*resultSet.getString(3),
                 resultSet.getFloat(4));*/
             }
         }
