@@ -36,7 +36,7 @@ public class Surtidor {
         String ipJuan = "25.49.16.34";
         String ipAlvaro = "25.49.55.58";
         
-        String ip = ipJuan;
+        String ip = ipAlvaro;
         int port = 69;
                 
         try{
@@ -52,6 +52,25 @@ public class Surtidor {
             while(true){
                 String inSocket = in.readUTF();
                 System.out.println("Desde el Distribuidor llega: " + inSocket);
+                String[] venta = inSocket.split("precio =");
+                System.out.println("venta: "+venta[0]);
+                System.out.println("venta: "+venta[1]);
+                
+                String[] precio = venta[1].split("WHERE");
+                System.out.println("precio: "+precio[0]);
+                int pre = Integer.getInteger(precio[0]);
+                System.out.println("precio: "+precio[1]);
+                String[] combustible = precio[1].split("tipo_combustible = ");
+                System.out.println("Tipo combustible: "+combustible[1]);
+                String comb = combustible[1];
+                if (comb.equals("'Gas95'"))
+                {
+                   menu.setPrecio95(pre);
+                    System.out.println("precio 95: "+menu.getPrecio95());
+                }
+                
+
+                
                 
             }
         }

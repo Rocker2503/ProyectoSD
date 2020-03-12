@@ -86,6 +86,7 @@ public class TunelDistribuidor extends Thread {
                 
                 //Mandar precio al surtidor
                 osServidor.writeUTF(mensaje);
+                setPrecioSurtidores(mensaje);
             }
             /*
             String line;

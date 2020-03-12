@@ -34,7 +34,41 @@ public class SurtidorMenu extends Thread{
         this.precio97 = precio97;
         this.diesel = diesel;
         this.kerosene = kerosene;
-    }    
+    }
+
+    public void setPrecio93(int precio93)
+    {
+        this.precio93 = precio93;
+    }
+
+    public void setPrecio95(int precio95)
+    {
+        this.precio95 = precio95;
+    }
+
+    public void setPrecio97(int precio97)
+    {
+        this.precio97 = precio97;
+    }
+
+    public void setDiesel(int diesel)
+    {
+        this.diesel = diesel;
+    }
+
+    public void setKerosene(int kerosene)
+    {
+        this.kerosene = kerosene;
+    }
+
+    public int getPrecio95()
+    {
+        return precio95;
+    }
+    
+    
+
+    
     
     @Override
     public void run(){
