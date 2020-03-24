@@ -54,6 +54,7 @@ public class ServidorMenu extends Thread{
     public void generarReporte(){
         String query = "Select * FROM venta_general";
         context.selectBD(query);
+        backupContext.selectBD(query);
     }
     
     public void actualizarPrecios(ArrayList<Socket> dist){
@@ -75,26 +76,31 @@ public class ServidorMenu extends Thread{
                 query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = 'Gas93'";
                 System.out.println("Query: "+query);
                 context.insertUpdateBD(query);
+                backupContext.insertUpdateBD(query);
                 actualizarTodo(query,dist);
                 break;
             case 2: 
                 query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = 'Gas95'";
                 context.insertUpdateBD(query);
+                backupContext.insertUpdateBD(query);
                 actualizarTodo(query,dist);
                 break;
             case 3: 
                 query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = 'Gas97'";
                 context.insertUpdateBD(query);
+                backupContext.insertUpdateBD(query);
                 actualizarTodo(query,dist);
                 break;
             case 4: 
                 query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = 'Diesel'";
                 context.insertUpdateBD(query);
+                backupContext.insertUpdateBD(query);
                 actualizarTodo(query,dist);
                 break;
             case 5: 
                 query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = 'Kerosene'";
                 context.insertUpdateBD(query);
+                backupContext.insertUpdateBD(query);
                 actualizarTodo(query,dist);
                 break;
         }
