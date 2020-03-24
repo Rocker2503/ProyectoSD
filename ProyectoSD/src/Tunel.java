@@ -20,10 +20,12 @@ public class Tunel extends Thread {
 
     private Socket listener;
     ConexionBDServidor context;
+    ConexionBDBackup backupContext;
 
     public Tunel(Socket s) {
         listener = s;
         this.context = new ConexionBDServidor();
+        this.backupContext = new ConexionBDBackup();
     }
 
     /*public synchronized boolean hasSenderAndListener() {
@@ -52,6 +54,7 @@ public class Tunel extends Thread {
                 String query = msj.replace("venta", "venta_general");
                 System.out.println("Desde el Distribuidor: " + query);
                 context.insertUpdateBD(query);
+                backupContext.insertUpdateBD(query);
             }
         }
         catch(IOException ex){
