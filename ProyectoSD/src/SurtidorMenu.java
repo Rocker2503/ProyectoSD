@@ -4,6 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
@@ -25,6 +26,7 @@ public class SurtidorMenu extends Thread{
     int precio97;
     int diesel;
     int kerosene;
+    ArrayList<String> colaVentas;
     
     public SurtidorMenu(Socket s, int precio93, int precio95, int precio97, int diesel, int kerosene){
         this.sucursal = s;
@@ -34,6 +36,7 @@ public class SurtidorMenu extends Thread{
         this.precio97 = precio97;
         this.diesel = diesel;
         this.kerosene = kerosene;
+        this.colaVentas = new ArrayList<String>();
     }
 
     public void setPrecio93(int precio93)
@@ -86,10 +89,24 @@ public class SurtidorMenu extends Thread{
         return kerosene;
     }
     
-    
-
-    
-    
+    private void enviarDatos(DataOutputStream dos, String msj){
+        try{
+            if(this.colaVentas.isEmpty()){
+                 dos.writeUTF(msj);
+            }
+            else{
+                for (int i = 0; i < this.colaVentas.size(); i++) {
+                dos.writeUTF(this.colaVentas.get(i));
+                }
+            dos.writeUTF(msj);
+            }
+        }
+        catch(Exception ex){
+            this.colaVentas.add(msj);
+            ex.printStackTrace();
+        }
+        
+    }   
     @Override
     public void run(){
         int opcion;
@@ -120,27 +137,27 @@ public class SurtidorMenu extends Thread{
                      case 1: 
                         msj = "Gas93" + " " + lt + " " + Integer.toString(this.precio93) + " " + hoy;
                         System.out.println("msj: " + msj);
-                        dos.writeUTF(msj);
+                        enviarDatos(dos,msj);
                         break;
                      case 2:
                         msj = "Gas95" + " " + lt + " " + Integer.toString(this.precio95) + " " + hoy; 
                         System.out.println("msj: " + msj);
-                        dos.writeUTF(msj);
+                        enviarDatos(dos,msj);
                         break;
                      case 3:
                         msj = "Gas97" + " " + lt + " " + Integer.toString(this.precio95) + " " + hoy; 
                         System.out.println("msj: " + msj);
-                        dos.writeUTF(msj);
+                        enviarDatos(dos,msj);
                         break;
                      case 4:
                         msj = "Diesel" + " " + lt + " " + Integer.toString(this.diesel) + " " + hoy; 
                         System.out.println("msj: " + msj);
-                        dos.writeUTF(msj);
+                        enviarDatos(dos,msj);
                         break;
                      case 5:
                         msj = "Kerosene" + " " + lt + " " + Integer.toString(this.kerosene)+ " " + hoy; 
                         System.out.println("msj: " + msj);
-                        dos.writeUTF(msj);
+                        enviarDatos(dos,msj);
                         break;
                  }
             }

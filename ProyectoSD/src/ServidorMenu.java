@@ -21,6 +21,7 @@ public class ServidorMenu extends Thread{
     private ServerSocket servidor;
     private Scanner scanner;
     private ConexionBDServidor context;
+    private ConexionBDBackup backupContext;
     
     public ServidorMenu(ServerSocket s){
         this.servidor = s;
