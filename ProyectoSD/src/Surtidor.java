@@ -37,7 +37,7 @@ public class Surtidor {
         String ipJuan = "25.49.16.34";
         String ipAlvaro = "25.49.55.58";
         
-        String ip = ipNico;
+        String ip = ipAlvaro;
         int port = 69;
                 
         try{
@@ -55,7 +55,16 @@ public class Surtidor {
                 try{
                     while(!socket.isClosed())
                     {
-                        String inSocket = in.readUTF();
+                        String inSocket = "";
+                        try{
+                        
+                            inSocket = in.readUTF();
+
+                        }
+                        catch(SocketException ex){
+                            ex.printStackTrace();
+                            System.out.println("Exception");
+                        }  
                         System.out.println("Desde el Distribuidor llega: " + inSocket);
                         String[] venta = inSocket.split("precio =");
                         //System.out.println("venta: "+venta[0]);
