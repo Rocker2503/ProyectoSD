@@ -10,8 +10,8 @@ CREATE TABLE `venta_general` (
   `tipo_combustible` varchar(16) DEFAULT NULL,
   `litros` int DEFAULT NULL,
   `total` int DEFAULT NULL,
-  PRIMARY KEY (id_venta),
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  PRIMARY KEY (id_venta)
+);
 
 --
 -- Estructura de tabla para la tabla `Distribuidores`
@@ -21,8 +21,8 @@ CREATE TABLE `precios` (
   `id` int NOT NULL ,
   `tipo_combustible` varchar(16) NOT NULL,
   `precio` int NOT NULL,
-  PRIMARY KEY (id),
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  PRIMARY KEY (id)
+);
 
 INSERT into precios VALUES(1, "Gas93", 600)
 INSERT into precios VALUES(2, "Gas95", 600)

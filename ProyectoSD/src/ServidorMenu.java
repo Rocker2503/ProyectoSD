@@ -54,7 +54,7 @@ public class ServidorMenu extends Thread{
     public void generarReporte(){
         String query = "Select * FROM venta_general";
         context.selectBD(query);
-        backupContext.selectBD(query);
+        //backupContext.selectBD(query);
     }
     
     public void actualizarPrecios(ArrayList<Socket> dist){

@@ -29,7 +29,7 @@ public class Distribuidor {
         String ipJuan = "25.49.16.34";
         String ipAlvaro = "25.49.55.58";
         
-        String ip = ipJuan;
+        String ip = ipNico;
         
         int listenPort = 69;
         
