@@ -28,6 +28,7 @@ public class ServidorMenu extends Thread{
         this.distribuidores = new ArrayList<>();
         this.scanner = new Scanner(System.in);
         this.context = new ConexionBDServidor();
+        this.backupContext = new ConexionBDBackup();
     }
 
     @Override
