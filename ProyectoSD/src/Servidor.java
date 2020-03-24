@@ -24,7 +24,7 @@ public class Servidor {
         String ipAlvaro = "25.49.55.58";
         int port = 49775;
         
-        String ip = ipJuan;
+        String ip = ipAlvaro;
         
         ArrayList<Tunel> listeners = new ArrayList<>();
         Tunel tunel = null;
@@ -32,6 +32,7 @@ public class Servidor {
         Socket distribuidor = null;
         
         ConexionBDServidor context = new ConexionBDServidor();
+        ConexionBDBackup backup = new ConexionBDBackup();
         InetAddress addr = InetAddress.getByName(ip); 
 
         try{

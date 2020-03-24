@@ -15,10 +15,14 @@ public class ConexionBDBackup {
     Statement statement;
     ResultSet resultSet;
     
-    static final String BDURL = "jdbc:mysql://localhost:3306/serverbackup";
+    static String conexionAWS = "jdbc:mysql://p3distribuidos.cmmqgr4kvqxz.us-east-2.rds.amazonaws.com/serverbackup";
+    static String userAWS = "admin";
+    static String passAWS = "juanconlapera";
+    
+    static final String BDURL = conexionAWS;
     static final String BDDRV = "com.mysql.jdbc.Driver";
-    static final String BD_USR = "root";
-    static final String BD_PSW = "";
+    static final String BD_USR = userAWS;
+    static final String BD_PSW = passAWS;
 
     public ConexionBDBackup() {
         connection = null;
