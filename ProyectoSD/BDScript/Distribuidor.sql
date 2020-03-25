@@ -23,6 +23,9 @@ CREATE TABLE `precios` (
   PRIMARY KEY (id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
+INSERT into precios VALUES(1, "Gas93", 600);
+INSERT into precios VALUES(2, "Gas95", 600);
+INSERT into precios VALUES(3, "Gas97", 600);
+INSERT into precios VALUES(4, "Kerosene", 600);
+INSERT into precios VALUES(5, "Diesel", 600);
 

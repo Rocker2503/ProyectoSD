@@ -39,6 +39,7 @@ public class Distribuidor {
         TunelDistribuidor tunelDistribuidor;
         
         ConexionBDDistribuidor context = new ConexionBDDistribuidor();
+        ConexionBDBackupDistribuidor backup = new ConexionBDBackupDistribuidor();
         InetAddress addr = InetAddress.getByName(ip);
         //context.insertUpdateBD("INSERT INTO precio(id,precio) VALUES('1','1000')");
 
