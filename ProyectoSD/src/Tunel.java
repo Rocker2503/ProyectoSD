@@ -39,6 +39,43 @@ public class Tunel extends Thread {
     public synchronized void setServidor(Socket servidor) {
         this.listener = servidor;
     }
+    
+    public String escucharSocket(DataInputStream dis)
+    {
+        String men = "";
+        try
+        {
+            men = dis.readUTF();
+        }
+        catch(IOException ex)
+        {
+            System.out.println("Conexion perdida con el Distribuidor");
+        }
+        return men;
+    }    
+    
+    public boolean socketConectado(DataInputStream dis)
+    {
+        String men = "";
+        try
+        {
+            men = dis.readUTF();
+        }
+        catch(IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        if(men.equals(""))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    
+    
 
     /*public synchronized void setListener(Socket listener) {
         this.listener = listener;
@@ -49,16 +86,41 @@ public class Tunel extends Thread {
         String msj;
         try{
             DataInputStream dis = new DataInputStream(listener.getInputStream());
-            while(!listener.isClosed()){
-                msj = dis.readUTF();
-                String query = msj.replace("venta", "venta_general");
-                System.out.println("Desde el Distribuidor: " + query);
-                context.insertUpdateBD(query);
-                backupContext.insertUpdateBD(query);
+            while(this.socketConectado(dis)){
+                
+                msj = this.escucharSocket(dis);
+                if(!msj.equals(""))
+                {
+                    String query = msj.replace("venta", "venta_general");
+                    System.out.println("Desde el Distribuidor: " + query);
+                }
+                else
+                {
+                    System.out.println("conexion perdida");
+                }
+                /*try
+                {
+                    msj = dis.readUTF();
+                    String query = msj.replace("venta", "venta_general");
+                    System.out.println("Desde el Distribuidor: " + query);
+                    context.insertUpdateBD(query);
+                    backupContext.insertUpdateBD(query);
+                    System.out.println("readUTF: " + msj);
+
+                }
+                catch(IOException ex)
+                {
+                    System.out.println("Exception");
+                    ex.printStackTrace();
+                }*/
+                
+
+
             }
         }
         catch(IOException ex){
-            ex.printStackTrace();
+            System.out.println("Conexion perdida con el Distribuidor");
+            //ex.printStackTrace();
         }
 
     }

@@ -24,12 +24,14 @@ public class TunelSurtidor extends Thread {
     private Socket surtidor;
     ConexionBDDistribuidor context;
     ConexionBDBackupDistribuidor backupContext;
+    private LogSurtidor log;
 
     public TunelSurtidor(Socket servidor, Socket surtidor) {
         this.servidor = servidor;
         this.surtidor = surtidor;
         this.context = new ConexionBDDistribuidor();
         this.backupContext = new ConexionBDBackupDistribuidor();
+        this.log = new LogSurtidor();
 
     }
 
@@ -51,6 +53,42 @@ public class TunelSurtidor extends Thread {
 
     public synchronized void setSurtidor(Socket surtidor) {
         this.surtidor = surtidor;
+    }
+    
+    public boolean socketInConectado(DataInputStream dis)
+    {
+        String men = "";
+        try
+        {
+            men = dis.readUTF();
+        }
+        catch(IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        if(men.equals(""))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    
+        public boolean socketOutConectado(DataOutputStream dis)
+    {
+        String men = "";
+        try
+        {
+            dis.writeUTF(men);
+            return true;
+        }
+        catch(IOException ex)
+        {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     /*public synchronized void setListener(Socket listener) {
@@ -74,25 +112,60 @@ public class TunelSurtidor extends Thread {
             while((!servidor.isClosed()) && (!surtidor.isClosed()) )
             {
                 //Recibe venta
-                String mensaje = isSurtidor.readUTF();
+                String mensaje = "";
+                if(socketInConectado(isSurtidor))
+                {
+                    mensaje = isSurtidor.readUTF();
+                    String[] venta = mensaje.split(" ");
                 
-                String[] venta = mensaje.split(" ");
+                    String tipo = venta[0];
+                    String litros = venta[1];
+                    String precio = venta[2];
+                    String hoy = venta[3];
+                    //System.out.println("Variables: " + tipo + " " + litros + " " + precio + " " + hoy);
+
+                    int precioInt = Integer.parseInt(precio);
+                    int litrosInt = Integer.parseInt(litros);
+
+
+                    int total = litrosInt*precioInt;
+
+                    System.out.println("Venta: " + tipo + ", " + litros + ", " + precio + ", " + hoy);
+
+                    //Actualizar venta BD  
+
+                    String query = String.format("INSERT INTO venta(fecha,tipo_combustible,litros, total) VALUES('%s', '%s', '%s', '%d')", hoy, tipo, litros, total);
+                    //System.out.println("Query: " + query);
+                    context.insertUpdateBD(query);
+                    
+                    if(socketOutConectado(osServidor))
+                    {
+                        try
+                        {
+                            osServidor.writeUTF(query);
+                        }
+                        catch(IOException ex)
+                        {
+                            System.out.println("Error de conexion con el servidor");
+                        }
+                    }
+                    else
+                    {
+                        //this.log.setFecha(fecha);
+                        System.out.println("Error de conexion (escritura) con el servidor");
+
+                    }
+
+                }
+                else
+                {
+                    System.out.println("Error de conexion (Lectura) con el servidor");
+                }
                 
-                String tipo = venta[0];
-                String litros = venta[1];
-                String precio = venta[2];
-                String hoy = venta[3];
-                //System.out.println("Variables: " + tipo + " " + litros + " " + precio + " " + hoy);
-                
-                int precioInt = Integer.parseInt(precio);
-                int litrosInt = Integer.parseInt(litros);
+             
                 
                 
-                int total = litrosInt*precioInt;
                 
-                System.out.println("Venta: " + tipo + ", " + litros + ", " + precio + ", " + hoy);
-                
-                //Actualizar venta BD  
 
                 String query = String.format("INSERT INTO venta(fecha,tipo_combustible,litros, total) VALUES('%s', '%s', '%s', '%d')", hoy, tipo, litros, total);
                 //System.out.println("Query: " + query);

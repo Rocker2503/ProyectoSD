@@ -25,7 +25,7 @@ public class TunelDistribuidor extends Thread {
     String ipAlvaro = "25.49.55.58";
     int port = 49775;
     
-    String ip = ipJuan;
+    String ip = ipNico;
 
     private Socket servidor;
     //private Socket surtidor;
