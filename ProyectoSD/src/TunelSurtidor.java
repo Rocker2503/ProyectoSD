@@ -23,11 +23,13 @@ public class TunelSurtidor extends Thread {
     private Socket servidor;
     private Socket surtidor;
     ConexionBDDistribuidor context;
+    ConexionBDBackupDistribuidor backupContext;
 
     public TunelSurtidor(Socket servidor, Socket surtidor) {
         this.servidor = servidor;
         this.surtidor = surtidor;
         this.context = new ConexionBDDistribuidor();
+        this.backupContext = new ConexionBDBackupDistribuidor();
 
     }
 
@@ -95,6 +97,7 @@ public class TunelSurtidor extends Thread {
                 String query = String.format("INSERT INTO venta(fecha,tipo_combustible,litros, total) VALUES('%s', '%s', '%s', '%d')", hoy, tipo, litros, total);
                 //System.out.println("Query: " + query);
                 context.insertUpdateBD(query);
+                backupContext.insertUpdateBD(query);
                 
                 osServidor.writeUTF(query);
             }            

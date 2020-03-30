@@ -7,15 +7,15 @@ import java.sql.Statement;
 
 /**
  *
- * @author Nicolas
+ * @author Juan
  */
-public class ConexionBDBackup {
+public class ConexionBDBackupDistribuidor {
     
     Connection connection;
     Statement statement;
     ResultSet resultSet;
     
-    static String conexionAWS = "jdbc:mysql://p3distribuidos.cmmqgr4kvqxz.us-east-2.rds.amazonaws.com/serverbackup";
+    static String conexionAWS = "jdbc:mysql://p3distribuidos.cmmqgr4kvqxz.us-east-2.rds.amazonaws.com/distribuidorbackup";
     static String userAWS = "admin";
     static String passAWS = "juanconlapera";
     
@@ -24,7 +24,7 @@ public class ConexionBDBackup {
     static final String BD_USR = userAWS;
     static final String BD_PSW = passAWS;
 
-    public ConexionBDBackup() {
+    public ConexionBDBackupDistribuidor() {
         connection = null;
         statement = null;
         resultSet = null;
@@ -51,7 +51,7 @@ public class ConexionBDBackup {
         }
     }
     
-    public void selectBD(String query){
+    /*public void selectBD(String query){
         try{
             connection = DriverManager.getConnection(BDURL, BD_USR, BD_PSW);
             statement = connection.createStatement();
@@ -65,8 +65,7 @@ public class ConexionBDBackup {
                 String litros = resultSet.getString("litros");
                 String total = resultSet.getString("total");
                 System.out.printf("%s %s %s %s \n ", fecha, tipo, litros, total);
-                /*resultSet.getString(3),
-                resultSet.getFloat(4));*/
+
             }
         }
         catch(SQLException ex){
@@ -80,7 +79,7 @@ public class ConexionBDBackup {
             }
             
         }
-    }
+    }*/
     
      
 }

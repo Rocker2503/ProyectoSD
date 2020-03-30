@@ -33,6 +33,7 @@ public class TunelDistribuidor extends Thread {
     ArrayList<TunelSurtidor> escuchaSurtidores;
     ArrayList<Socket> escuchaDistribuidor;
     ConexionBDDistribuidor context;
+    ConexionBDBackupDistribuidor backupContext;
 
     public TunelDistribuidor() throws IOException {
         
@@ -41,6 +42,7 @@ public class TunelDistribuidor extends Thread {
         
         servidor  = new Socket(ip, port);
         this.context = new ConexionBDDistribuidor();
+        this.backupContext = new ConexionBDBackupDistribuidor();
 
     }
 
@@ -85,6 +87,7 @@ public class TunelDistribuidor extends Thread {
                 
                 //Actualizar precio BD
                 context.insertUpdateBD(mensaje);
+                backupContext.insertUpdateBD(mensaje);
                 
                 //Mandar precio al surtidor
                 osServidor.writeUTF(mensaje);
