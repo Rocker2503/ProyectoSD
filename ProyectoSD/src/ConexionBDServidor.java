@@ -78,5 +78,35 @@ public class ConexionBDServidor {
             
         }
     }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public Statement getStatement() {
+        return statement;
+    }
+
+    public ResultSet getResultSet() {
+        return resultSet;
+    }
+
+    public static String getBDURL() {
+        return BDURL;
+    }
+
+    public static String getBDDRV() {
+        return BDDRV;
+    }
+
+    public static String getBD_USR() {
+        return BD_USR;
+    }
+
+    public static String getBD_PSW() {
+        return BD_PSW;
+    }
+    
+    
     
 }

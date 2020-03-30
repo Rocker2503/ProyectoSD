@@ -43,9 +43,11 @@ public class ServidorMenu extends Thread{
             switch(seleccion){
                 case 1: 
                     generarReporte();
+                    System.out.println("");
                     break;
                 case 2:
                     actualizarPrecios(this.distribuidores);
+                    System.out.println("");
                     break;
             }
         }
@@ -53,8 +55,14 @@ public class ServidorMenu extends Thread{
     
     public void generarReporte(){
         String query = "Select * FROM venta_general";
-        context.selectBD(query);
-        backupContext.selectBD(query);
+        this.context = new ConexionBDServidor();
+        
+        try {
+            context.selectBD(query);
+        } catch (Exception e) {
+            System.out.println("Conexión principal perdida, usando backup");
+            backupContext.selectBD(query);
+        }
     }
     
     public void actualizarPrecios(ArrayList<Socket> dist){
