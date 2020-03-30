@@ -137,6 +137,7 @@ public class TunelSurtidor extends Thread {
                     String query = String.format("INSERT INTO venta(fecha,tipo_combustible,litros, total) VALUES('%s', '%s', '%s', '%d')", hoy, tipo, litros, total);
                     //System.out.println("Query: " + query);
                     context.insertUpdateBD(query);
+                    backupContext.insertUpdateBD(query);
                     
                     if(socketOutConectado(osServidor))
                     {
@@ -161,18 +162,6 @@ public class TunelSurtidor extends Thread {
                 {
                     System.out.println("Error de conexion (Lectura) con el servidor");
                 }
-                
-             
-                
-                
-                
-
-                String query = String.format("INSERT INTO venta(fecha,tipo_combustible,litros, total) VALUES('%s', '%s', '%s', '%d')", hoy, tipo, litros, total);
-                //System.out.println("Query: " + query);
-                context.insertUpdateBD(query);
-                backupContext.insertUpdateBD(query);
-                
-                osServidor.writeUTF(query);
             }            
             /*String line;
             
