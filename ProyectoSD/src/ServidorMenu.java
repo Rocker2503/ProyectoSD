@@ -22,6 +22,7 @@ public class ServidorMenu extends Thread{
     private Scanner scanner;
     private ConexionBDServidor context;
     private ConexionBDBackup backupContext;
+    ArrayList<String> sincronia;
     
     public ServidorMenu(ServerSocket s){
         this.servidor = s;
@@ -29,6 +30,7 @@ public class ServidorMenu extends Thread{
         this.scanner = new Scanner(System.in);
         this.context = new ConexionBDServidor();
         this.backupContext = new ConexionBDBackup();
+        this.sincronia = new ArrayList<>();
     }
 
     @Override
@@ -86,9 +88,13 @@ public class ServidorMenu extends Thread{
                 
                 this.context = new ConexionBDServidor();                
                 try {
+                    sincronizarBD();
                     context.insertUpdateBD(query);
+                    backupContext.insertUpdateBD(query);
+
                 } catch (Exception e) {
                     System.out.println("Conexión principal perdida, usando backup");
+                    this.sincronia.add(query);
                     backupContext.insertUpdateBD(query);
                 }
                 
@@ -98,9 +104,13 @@ public class ServidorMenu extends Thread{
                 query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = 'Gas95'";
                 this.context = new ConexionBDServidor();                
                 try {
+                    sincronizarBD();
                     context.insertUpdateBD(query);
+                    backupContext.insertUpdateBD(query);
+
                 } catch (Exception e) {
                     System.out.println("Conexión principal perdida, usando backup");
+                    this.sincronia.add(query);
                     backupContext.insertUpdateBD(query);
                 }
                 actualizarTodo(query,dist);
@@ -109,9 +119,13 @@ public class ServidorMenu extends Thread{
                 query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = 'Gas97'";
                 this.context = new ConexionBDServidor();                
                 try {
+                    sincronizarBD();
                     context.insertUpdateBD(query);
+                    backupContext.insertUpdateBD(query);
+
                 } catch (Exception e) {
                     System.out.println("Conexión principal perdida, usando backup");
+                    this.sincronia.add(query);
                     backupContext.insertUpdateBD(query);
                 }
                 actualizarTodo(query,dist);
@@ -120,9 +134,13 @@ public class ServidorMenu extends Thread{
                 query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = 'Diesel'";
                 this.context = new ConexionBDServidor();                
                 try {
+                    sincronizarBD();
                     context.insertUpdateBD(query);
+                    backupContext.insertUpdateBD(query);
+
                 } catch (Exception e) {
                     System.out.println("Conexión principal perdida, usando backup");
+                    this.sincronia.add(query);
                     backupContext.insertUpdateBD(query);
                 }
                 actualizarTodo(query,dist);
@@ -131,9 +149,13 @@ public class ServidorMenu extends Thread{
                 query = "UPDATE precios SET precio = " + Integer.toString(precio) + " WHERE tipo_combustible = 'Kerosene'";
                 this.context = new ConexionBDServidor();                
                 try {
+                    sincronizarBD();
                     context.insertUpdateBD(query);
+                    backupContext.insertUpdateBD(query);
+
                 } catch (Exception e) {
                     System.out.println("Conexión principal perdida, usando backup");
+                    this.sincronia.add(query);
                     backupContext.insertUpdateBD(query);
                 }
                 actualizarTodo(query,dist);
@@ -156,6 +178,26 @@ public class ServidorMenu extends Thread{
         }
         catch(IOException ex){
             ex.printStackTrace();
+        }
+    }
+
+    private void sincronizarBD() {
+        System.out.println("Sincronizar BD principal");
+        //System.out.println("leng: " + this.sincronia.size());
+        if(!this.sincronia.isEmpty()){
+            String local;
+            ArrayList<String> sincronizados = new ArrayList<>();
+            
+            for (int i = 0; i < this.sincronia.size(); i++) {
+                local = this.sincronia.get(i);
+                System.out.println("local: " + local);
+                try {
+                 this.context.insertUpdateBD(local);
+                 sincronizados.add(local);
+                } catch (Exception e) {
+                }
+            }
+            this.sincronia.removeAll(sincronizados);
         }
     }
     

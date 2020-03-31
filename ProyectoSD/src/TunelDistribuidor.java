@@ -34,6 +34,7 @@ public class TunelDistribuidor extends Thread {
     ArrayList<Socket> escuchaDistribuidor;
     ConexionBDDistribuidor context;
     ConexionBDBackupDistribuidor backupContext;
+    ArrayList<String> sincronia;
 
     public TunelDistribuidor() throws IOException {
         
@@ -43,6 +44,7 @@ public class TunelDistribuidor extends Thread {
         servidor  = new Socket(ip, port);
         this.context = new ConexionBDDistribuidor();
         this.backupContext = new ConexionBDBackupDistribuidor();
+        this.sincronia = new ArrayList<>();
 
     }
 
@@ -89,11 +91,13 @@ public class TunelDistribuidor extends Thread {
                 this.context = new ConexionBDDistribuidor();
            
                 try {
+                    sincronizarBD();
                     context.insertUpdateBD(mensaje);
                     backupContext.insertUpdateBD(mensaje);
 
                 } catch (Exception e) {
                     System.out.println("Conexión principal perdida, usando backup");
+                    this.sincronia.add(mensaje);
                     backupContext.insertUpdateBD(mensaje);
                 }
                 
@@ -160,5 +164,25 @@ public class TunelDistribuidor extends Thread {
                 output.writeUTF(mensaje);
                 
             }
+    }
+
+    private void sincronizarBD() {
+        System.out.println("Sincronizar BD principal");
+        //System.out.println("leng: " + this.sincronia.size());
+        if(!this.sincronia.isEmpty()){
+            String local;
+            ArrayList<String> sincronizados = new ArrayList<>();
+            
+            for (int i = 0; i < this.sincronia.size(); i++) {
+                local = this.sincronia.get(i);
+                System.out.println("local: " + local);
+                try {
+                 this.context.insertUpdateBD(local);
+                 sincronizados.add(local);
+                } catch (Exception e) {
+                }
+            }
+            this.sincronia.removeAll(sincronizados);
+        }
     }
 }
