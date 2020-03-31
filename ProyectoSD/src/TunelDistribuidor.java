@@ -86,8 +86,18 @@ public class TunelDistribuidor extends Thread {
                 System.out.println("Mensaje leido: "+mensaje);
                 
                 //Actualizar precio BD
-                context.insertUpdateBD(mensaje);
-                backupContext.insertUpdateBD(mensaje);
+                this.context = new ConexionBDDistribuidor();
+           
+                try {
+                    context.insertUpdateBD(mensaje);
+                    backupContext.insertUpdateBD(mensaje);
+
+                } catch (Exception e) {
+                    System.out.println("Conexión principal perdida, usando backup");
+                    backupContext.insertUpdateBD(mensaje);
+                }
+                
+                //context.insertUpdateBD(mensaje);
                 
                 //Mandar precio al surtidor
                 osServidor.writeUTF(mensaje);

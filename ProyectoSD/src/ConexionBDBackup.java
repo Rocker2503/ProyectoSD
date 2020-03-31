@@ -36,16 +36,13 @@ public class ConexionBDBackup {
             statement = connection.createStatement();
             statement.executeUpdate(query);
         }
-        catch(SQLException ex){
-            System.out.println("ex: "+ex.getSQLState());
-            
+        catch(SQLException ex){            
         }finally{
             try{
                 //resultSet.close();
                 statement.close();
                 connection.close();
             }catch(SQLException ex){
-                System.out.println("ex: "+ex.getSQLState());
             }
             
         }

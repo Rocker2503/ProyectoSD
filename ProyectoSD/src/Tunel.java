@@ -53,8 +53,13 @@ public class Tunel extends Thread {
                 msj = dis.readUTF();
                 String query = msj.replace("venta", "venta_general");
                 System.out.println("Desde el Distribuidor: " + query);
-                context.insertUpdateBD(query);
-                backupContext.insertUpdateBD(query);
+                try {
+                    context.insertUpdateBD(query);
+                    backupContext.insertUpdateBD(query);
+                } catch (Exception e) {
+                    System.out.println("Conexión principal perdida, usando backup");
+                    backupContext.insertUpdateBD(query);
+                }
             }
         }
         catch(IOException ex){

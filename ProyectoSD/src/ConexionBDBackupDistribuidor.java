@@ -45,7 +45,6 @@ public class ConexionBDBackupDistribuidor {
                 statement.close();
                 connection.close();
             }catch(SQLException ex){
-                System.out.println("ex: "+ex.getSQLState());
             }
             
         }
