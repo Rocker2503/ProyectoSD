@@ -3,6 +3,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -27,6 +28,8 @@ public class SurtidorMenu extends Thread{
     int diesel;
     int kerosene;
     ArrayList<String> colaVentas;
+    Date fechaI;
+    Date fechaF;
     
     public SurtidorMenu(Socket s, int precio93, int precio95, int precio97, int diesel, int kerosene){
         this.sucursal = s;
@@ -37,6 +40,8 @@ public class SurtidorMenu extends Thread{
         this.diesel = diesel;
         this.kerosene = kerosene;
         this.colaVentas = new ArrayList<String>();
+
+        
     }
 
     public void setPrecio93(int precio93)
@@ -95,13 +100,20 @@ public class SurtidorMenu extends Thread{
                  dos.writeUTF(msj);
             }
             else{
+                this.fechaF = new Date(System.currentTimeMillis());
                 for (int i = 0; i < this.colaVentas.size(); i++) {
                 dos.writeUTF(this.colaVentas.get(i));
                 }
-            dos.writeUTF(msj);
+                System.out.println("fecha caida: "+this.fechaI.toString());
+                dos.writeUTF(msj);
             }
         }
         catch(Exception ex){
+            if(this.fechaI == null)
+            {
+                this.fechaI = new Date(System.currentTimeMillis());
+            }
+            System.out.println("agregando");
             this.colaVentas.add(msj);
             ex.printStackTrace();
         }
