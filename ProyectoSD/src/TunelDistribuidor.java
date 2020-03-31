@@ -75,12 +75,12 @@ public class TunelDistribuidor extends Thread {
     public void run() {
         DataInputStream isServidor = null;
         DataOutputStream osServidor = null;
-        ObjectInputStream oii = null;
+
 
         try {
             isServidor = new DataInputStream(servidor.getInputStream());
             osServidor = new DataOutputStream(servidor.getOutputStream());
-            oii = new ObjectInputStream(servidor.getInputStream());
+
 
             while(!servidor.isClosed())
             {
@@ -88,9 +88,7 @@ public class TunelDistribuidor extends Thread {
                 String mensaje = isServidor.readUTF();
                 System.out.println("Mensaje leido: "+mensaje);
                 
-                LogCaida log = (LogCaida)oii.readObject();
-                System.out.println("Surtidor caido: " + log.getFechaI().toString());
-                System.out.println("Tiempo caido: " + log.tiempoCaidoSeg());
+
                 
                 //Actualizar precio BD
                 context.insertUpdateBD(mensaje);
@@ -133,9 +131,6 @@ public class TunelDistribuidor extends Thread {
             
         } catch (IOException ex) {
             Logger.getLogger(TunelSurtidor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(TunelDistribuidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

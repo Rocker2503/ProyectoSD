@@ -8,6 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -64,6 +65,8 @@ public class TunelSurtidor extends Thread {
         
         DataInputStream isSurtidor = null;
         DataOutputStream osSurtidor = null;
+        
+        ObjectInputStream oii = null;
         try {
             isServidor = new DataInputStream(servidor.getInputStream());
             osServidor = new DataOutputStream(servidor.getOutputStream());
@@ -71,11 +74,16 @@ public class TunelSurtidor extends Thread {
             isSurtidor = new DataInputStream(surtidor.getInputStream());
             osSurtidor = new DataOutputStream(surtidor.getOutputStream());
             
+            oii = new ObjectInputStream(servidor.getInputStream());
             while((!servidor.isClosed()) && (!surtidor.isClosed()) )
             {
+                
+                LogCaida log = (LogCaida)oii.readObject();
+                System.out.println("Surtidor caido: " + log.getFechaI().toString());
+                System.out.println("Tiempo caido: " + log.tiempoCaidoSeg());
+                
                 //Recibe venta
                 String mensaje = isSurtidor.readUTF();
-                
                 String[] venta = mensaje.split(" ");
                 
                 String tipo = venta[0];
@@ -130,6 +138,9 @@ public class TunelSurtidor extends Thread {
                 }
             }*/
         } catch (IOException ex) {
+            Logger.getLogger(TunelSurtidor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
             Logger.getLogger(TunelSurtidor.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
