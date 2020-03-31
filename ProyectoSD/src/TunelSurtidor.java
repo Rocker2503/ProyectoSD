@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,12 +25,14 @@ public class TunelSurtidor extends Thread {
     private Socket surtidor;
     ConexionBDDistribuidor context;
     ConexionBDBackupDistribuidor backupContext;
+    ArrayList<String> sincronia;
 
     public TunelSurtidor(Socket servidor, Socket surtidor) {
         this.servidor = servidor;
         this.surtidor = surtidor;
         this.context = new ConexionBDDistribuidor();
         this.backupContext = new ConexionBDBackupDistribuidor();
+        this.sincronia = new ArrayList<>();
 
     }
 
@@ -98,10 +101,12 @@ public class TunelSurtidor extends Thread {
                 //System.out.println("Query: " + query);
                 
                 try {
+                    sincronizarBD();
                     context.insertUpdateBD(query);
                     backupContext.insertUpdateBD(query);
                 } catch (Exception e) {
                     System.out.println("Conexión principal perdida, usando backup");
+                    this.sincronia.add(query);
                     backupContext.insertUpdateBD(query);
                 }
                 
@@ -137,6 +142,26 @@ public class TunelSurtidor extends Thread {
             }*/
         } catch (IOException ex) {
             Logger.getLogger(TunelSurtidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void sincronizarBD() {
+        if(!this.sincronia.isEmpty()){
+            System.out.println("Sincronizar BD principal");
+            
+            String local;
+            ArrayList<String> sincronizados = new ArrayList<>();
+            
+            for (int i = 0; i < this.sincronia.size(); i++) {
+                local = this.sincronia.get(i);
+                System.out.println("local: " + local);
+                try {
+                 this.context.insertUpdateBD(local);
+                 sincronizados.add(local);
+                } catch (Exception e) {
+                }
+            }
+            this.sincronia.removeAll(sincronizados);
         }
     }
 }

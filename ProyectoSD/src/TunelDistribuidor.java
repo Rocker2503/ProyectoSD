@@ -167,9 +167,9 @@ public class TunelDistribuidor extends Thread {
     }
 
     private void sincronizarBD() {
-        System.out.println("Sincronizar BD principal");
-        //System.out.println("leng: " + this.sincronia.size());
         if(!this.sincronia.isEmpty()){
+            System.out.println("Sincronizar BD principal");
+
             String local;
             ArrayList<String> sincronizados = new ArrayList<>();
             

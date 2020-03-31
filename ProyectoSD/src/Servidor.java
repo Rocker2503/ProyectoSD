@@ -24,7 +24,7 @@ public class Servidor {
         String ipAlvaro = "25.49.55.58";
         int port = 49775;
         
-        String ip = ipAlvaro;
+        String ip = ipJuan;
         
         ArrayList<Tunel> listeners = new ArrayList<>();
         Tunel tunel = null;

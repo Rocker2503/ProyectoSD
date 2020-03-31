@@ -9,6 +9,7 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,11 +22,13 @@ public class Tunel extends Thread {
     private Socket listener;
     ConexionBDServidor context;
     ConexionBDBackup backupContext;
+    ArrayList<String> sincronia;
 
     public Tunel(Socket s) {
         listener = s;
         this.context = new ConexionBDServidor();
         this.backupContext = new ConexionBDBackup();
+        this.sincronia = new ArrayList<>();
     }
 
     /*public synchronized boolean hasSenderAndListener() {
@@ -54,10 +57,12 @@ public class Tunel extends Thread {
                 String query = msj.replace("venta", "venta_general");
                 System.out.println("Desde el Distribuidor: " + query);
                 try {
+                    sincronizarBD();
                     context.insertUpdateBD(query);
                     backupContext.insertUpdateBD(query);
                 } catch (Exception e) {
                     System.out.println("Conexión principal perdida, usando backup");
+                    this.sincronia.add(query);
                     backupContext.insertUpdateBD(query);
                 }
             }
@@ -66,6 +71,26 @@ public class Tunel extends Thread {
             ex.printStackTrace();
         }
 
+    }
+
+    private void sincronizarBD() {
+        if(!this.sincronia.isEmpty()){
+            System.out.println("Sincronizar BD principal");
+            
+            String local;
+            ArrayList<String> sincronizados = new ArrayList<>();
+            
+            for (int i = 0; i < this.sincronia.size(); i++) {
+                local = this.sincronia.get(i);
+                System.out.println("local: " + local);
+                try {
+                 this.context.insertUpdateBD(local);
+                 sincronizados.add(local);
+                } catch (Exception e) {
+                }
+            }
+            this.sincronia.removeAll(sincronizados);
+        }
     }
 
 }
