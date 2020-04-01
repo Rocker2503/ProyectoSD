@@ -101,6 +101,7 @@ public class TunelSurtidor extends Thread {
                 System.out.println("Venta: " + tipo + ", " + litros + ", " + precio + ", " + hoy);
                 
                 //Actualizar venta BD  
+                this.context = new ConexionBDDistribuidor();
 
                 String query = String.format("INSERT INTO venta(fecha,tipo_combustible,litros, total) VALUES('%s', '%s', '%s', '%d')", hoy, tipo, litros, total);
                 //System.out.println("Query: " + query);
