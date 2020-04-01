@@ -9,6 +9,7 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,8 +25,9 @@ public class Tunel extends Thread {
     ConexionBDBackup backupContext;
     ArrayList<String> sincronia;
 
-    public Tunel(Socket s) {
+    public Tunel(Socket s) throws SocketException {
         listener = s;
+        listener.setSoTimeout(0);
         this.context = new ConexionBDServidor();
         this.backupContext = new ConexionBDBackup();
         this.sincronia = new ArrayList<>();

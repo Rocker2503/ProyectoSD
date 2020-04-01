@@ -41,7 +41,7 @@ public class Surtidor {
                 
         try{
             Socket socket = new Socket(ip,port);
-            socket.setSoTimeout(3600*1000);
+            socket.setSoTimeout(0);
             System.out.println("info socket: " + socket.getInetAddress());
             Surtidor surt = new Surtidor(200,240,280,100,150);
             

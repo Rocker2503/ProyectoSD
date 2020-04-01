@@ -46,6 +46,7 @@ public class Distribuidor {
 // and now you can pass it to your socket-constructor
         try{
             serverDistribuidor = new ServerSocket(listenPort, 0, addr);
+            serverDistribuidor.setSoTimeout(0);
             //DataInputStream inServer = serverDistribuidor.getInputStream();
             //DataOutputStream outServer = serverDistribuidor.getOutputStream();
 
