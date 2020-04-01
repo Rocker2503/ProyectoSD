@@ -36,11 +36,12 @@ public class Surtidor {
         String ipJuan = "25.49.16.34";
         String ipAlvaro = "25.49.55.58";
         
-        String ip = ipJuan;
+        String ip = ipNico;
         int port = 69;
                 
         try{
             Socket socket = new Socket(ip,port);
+            socket.setSoTimeout(3600*1000);
             System.out.println("info socket: " + socket.getInetAddress());
             Surtidor surt = new Surtidor(200,240,280,100,150);
             

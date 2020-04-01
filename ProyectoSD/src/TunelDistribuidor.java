@@ -42,6 +42,7 @@ public class TunelDistribuidor extends Thread {
         escuchaDistribuidor = new ArrayList<>();
         
         servidor  = new Socket(ip, port);
+        servidor.setSoTimeout(10*1000);
         this.context = new ConexionBDDistribuidor();
         this.backupContext = new ConexionBDBackupDistribuidor();
         this.sincronia = new ArrayList<>();
@@ -147,7 +148,9 @@ public class TunelDistribuidor extends Thread {
         {
             if(nuevoSurtidor == null)
                 return;
-
+            
+            
+            nuevoSurtidor.setSoTimeout(3600*1000);
             TunelSurtidor tunel = new TunelSurtidor(this.servidor, nuevoSurtidor);
            //tunel.setSurtidor(nuevoSurtidor);
             tunel.start();
