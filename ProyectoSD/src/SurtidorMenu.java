@@ -97,12 +97,9 @@ public class SurtidorMenu extends Thread{
         try{
 
             if(this.colaVentas.isEmpty()){
-                 System.out.println("dentro del isempty");
                  dos.writeUTF(msj);
-                 System.out.println("en el if");
             }
             else{
-                System.out.println("en el else");
                 for (int i = 0; i < this.colaVentas.size(); i++) {
                 dos.writeUTF(this.colaVentas.get(i));
                 }
@@ -121,12 +118,10 @@ public class SurtidorMenu extends Thread{
         catch(Exception ex){
             if(this.log == null) 
             { 
-                System.out.println("cambia null");
                 this.log = new LogCaida(); 
                 this.log.setFechaI(new Date(System.currentTimeMillis())); 
             } 
             this.colaVentas.add(msj);
-            System.out.println("agrega a colaventas");
             ex.printStackTrace();
         }
         
