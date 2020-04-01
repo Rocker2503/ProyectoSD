@@ -93,12 +93,17 @@ public class SurtidorMenu extends Thread{
     }
     
      private void enviarDatos(DataOutputStream dos, String msj){
+         System.out.println("enviando datos");
         try{
+
             if(this.colaVentas.isEmpty()){
+                 System.out.println("dentro del isempty");
                  dos.writeUTF(msj);
+
             }
             else
             {
+                System.out.println("paso al else");
                 this.log.setFechaD(new Date(System.currentTimeMillis())); 
                 for (int i = 0; i < this.colaVentas.size(); i++)
                 {
@@ -107,7 +112,11 @@ public class SurtidorMenu extends Thread{
                 dos.writeUTF(msj);
                 String fCaida = ("Surtidor caido: " + log.getFechaI().toString()); 
                 String tCaida = ("Tiempo caido: " + log.tiempoCaidoSeg());
+                System.out.println("fc: " + fCaida);
+                System.out.println("tc: " + tCaida);
+
                 String reporte = fCaida + ", " + tCaida;
+                System.out.println("reporte: " + reporte);
                 dos.writeUTF(reporte);
                 //oos.writeObject(this.log); 
             }
@@ -115,10 +124,12 @@ public class SurtidorMenu extends Thread{
         catch(Exception ex){
             if(this.log == null) 
             { 
+                System.out.println("cambia null");
                 this.log = new LogCaida(); 
                 this.log.setFechaI(new Date(System.currentTimeMillis())); 
             } 
             this.colaVentas.add(msj);
+            System.out.println("agrega a colaventas");
             ex.printStackTrace();
         }
         
@@ -154,26 +165,31 @@ public class SurtidorMenu extends Thread{
                      case 1: 
                         msj = "Gas93" + " " + lt + " " + Integer.toString(this.precio93) + " " + hoy;
                         System.out.println("msj: " + msj);
+                        dos = new DataOutputStream(sucursal.getOutputStream());
                         enviarDatos(dos,msj);
                         break;
                      case 2:
                         msj = "Gas95" + " " + lt + " " + Integer.toString(this.precio95) + " " + hoy; 
                         System.out.println("msj: " + msj);
+                        dos = new DataOutputStream(sucursal.getOutputStream());
                         enviarDatos(dos,msj);
                         break;
                      case 3:
                         msj = "Gas97" + " " + lt + " " + Integer.toString(this.precio95) + " " + hoy; 
                         System.out.println("msj: " + msj);
+                        dos = new DataOutputStream(sucursal.getOutputStream());
                         enviarDatos(dos,msj);
                         break;
                      case 4:
                         msj = "Diesel" + " " + lt + " " + Integer.toString(this.diesel) + " " + hoy; 
                         System.out.println("msj: " + msj);
+                        dos = new DataOutputStream(sucursal.getOutputStream());
                         enviarDatos(dos,msj);
                         break;
                      case 5:
                         msj = "Kerosene" + " " + lt + " " + Integer.toString(this.kerosene)+ " " + hoy; 
                         System.out.println("msj: " + msj);
+                        dos = new DataOutputStream(sucursal.getOutputStream());
                         enviarDatos(dos,msj);
                         break;
                  }
