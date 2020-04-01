@@ -9,6 +9,7 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -27,9 +28,12 @@ public class TunelSurtidor extends Thread {
     ConexionBDBackupDistribuidor backupContext;
     ArrayList<String> sincronia;
 
-    public TunelSurtidor(Socket servidor, Socket surtidor) {
+    public TunelSurtidor(Socket servidor, Socket surtidor) throws SocketException {
         this.servidor = servidor;
         this.surtidor = surtidor;
+        this.servidor.setSoTimeout(0);
+        this.surtidor.setSoTimeout(0);
+
         this.context = new ConexionBDDistribuidor();
         this.backupContext = new ConexionBDBackupDistribuidor();
         this.sincronia = new ArrayList<>();
@@ -67,6 +71,7 @@ public class TunelSurtidor extends Thread {
         
         DataInputStream isSurtidor = null;
         DataOutputStream osSurtidor = null;
+        
         try {
             isServidor = new DataInputStream(servidor.getInputStream());
             osServidor = new DataOutputStream(servidor.getOutputStream());
