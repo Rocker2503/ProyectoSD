@@ -2,7 +2,9 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -27,6 +29,7 @@ public class SurtidorMenu extends Thread{
     int diesel;
     int kerosene;
     ArrayList<String> colaVentas;
+    LogCaida log; 
     
     public SurtidorMenu(Socket s, int precio93, int precio95, int precio97, int diesel, int kerosene){
         this.sucursal = s;
@@ -89,19 +92,32 @@ public class SurtidorMenu extends Thread{
         return kerosene;
     }
     
-    private void enviarDatos(DataOutputStream dos, String msj){
+     private void enviarDatos(DataOutputStream dos, String msj){
         try{
             if(this.colaVentas.isEmpty()){
                  dos.writeUTF(msj);
             }
-            else{
-                for (int i = 0; i < this.colaVentas.size(); i++) {
-                dos.writeUTF(this.colaVentas.get(i));
+            else
+            {
+                this.log.setFechaD(new Date(System.currentTimeMillis())); 
+                for (int i = 0; i < this.colaVentas.size(); i++)
+                {
+                    dos.writeUTF(this.colaVentas.get(i));
                 }
-            dos.writeUTF(msj);
+                dos.writeUTF(msj);
+                String fCaida = ("Surtidor caido: " + log.getFechaI().toString()); 
+                String tCaida = ("Tiempo caido: " + log.tiempoCaidoSeg());
+                String reporte = fCaida + ", " + tCaida;
+                dos.writeUTF(reporte);
+                //oos.writeObject(this.log); 
             }
         }
         catch(Exception ex){
+            if(this.log == null) 
+            { 
+                this.log = new LogCaida(); 
+                this.log.setFechaI(new Date(System.currentTimeMillis())); 
+            } 
             this.colaVentas.add(msj);
             ex.printStackTrace();
         }
@@ -112,6 +128,7 @@ public class SurtidorMenu extends Thread{
         int opcion;
         int litros;
         try{
+            //ObjectOutputStream oos = new ObjectOutputStream(sucursal.getOutputStream()); 
             DataOutputStream dos = new DataOutputStream(sucursal.getOutputStream());
             while(!sucursal.isClosed()){
                 System.out.println("Realizar una venta");
