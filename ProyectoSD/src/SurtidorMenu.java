@@ -90,11 +90,14 @@ public class SurtidorMenu extends Thread{
     }
     
     private void enviarDatos(DataOutputStream dos, String msj){
+        System.out.println("metodo enviar datos");
         try{
             if(this.colaVentas.isEmpty()){
                  dos.writeUTF(msj);
+                 System.out.println("en el if");
             }
             else{
+                System.out.println("en el else");
                 for (int i = 0; i < this.colaVentas.size(); i++) {
                 dos.writeUTF(this.colaVentas.get(i));
                 }
@@ -102,6 +105,7 @@ public class SurtidorMenu extends Thread{
             }
         }
         catch(Exception ex){
+            System.out.println("en el catch");
             this.colaVentas.add(msj);
             ex.printStackTrace();
         }
@@ -137,26 +141,31 @@ public class SurtidorMenu extends Thread{
                      case 1: 
                         msj = "Gas93" + " " + lt + " " + Integer.toString(this.precio93) + " " + hoy;
                         System.out.println("msj: " + msj);
+                        dos = new DataOutputStream(sucursal.getOutputStream()); 
                         enviarDatos(dos,msj);
                         break;
                      case 2:
                         msj = "Gas95" + " " + lt + " " + Integer.toString(this.precio95) + " " + hoy; 
                         System.out.println("msj: " + msj);
+                        dos = new DataOutputStream(sucursal.getOutputStream()); 
                         enviarDatos(dos,msj);
                         break;
                      case 3:
                         msj = "Gas97" + " " + lt + " " + Integer.toString(this.precio95) + " " + hoy; 
                         System.out.println("msj: " + msj);
+                        dos = new DataOutputStream(sucursal.getOutputStream()); 
                         enviarDatos(dos,msj);
                         break;
                      case 4:
                         msj = "Diesel" + " " + lt + " " + Integer.toString(this.diesel) + " " + hoy; 
                         System.out.println("msj: " + msj);
+                        dos = new DataOutputStream(sucursal.getOutputStream()); 
                         enviarDatos(dos,msj);
                         break;
                      case 5:
                         msj = "Kerosene" + " " + lt + " " + Integer.toString(this.kerosene)+ " " + hoy; 
                         System.out.println("msj: " + msj);
+                        dos = new DataOutputStream(sucursal.getOutputStream()); 
                         enviarDatos(dos,msj);
                         break;
                  }
